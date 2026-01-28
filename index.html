@@ -69,19 +69,81 @@
             grid-template-columns: 1fr;
             gap: 15px;
             animation: fadeIn 0.8s ease-out 0.3s both;
+            grid-auto-rows: auto;
         }
 
         /* Tablet: 2 columns */
         @media (min-width: 768px) {
             .info-grid {
                 grid-template-columns: repeat(2, 1fr);
+                grid-auto-flow: dense;
             }
         }
 
-        /* Desktop: 3 columns */
+        /* Desktop: 3 columns with masonry-like behavior */
         @media (min-width: 1200px) {
             .info-grid {
                 grid-template-columns: repeat(3, 1fr);
+                grid-auto-flow: dense;
+            }
+        }
+
+        /* Featured card - spans multiple columns */
+        .info-card.featured {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        .info-card.featured h2 {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.3);
+            font-size: 1.6em;
+        }
+
+        .info-card.featured .info-label {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.05em;
+            font-weight: 700;
+        }
+
+        .info-card.featured .info-value {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            font-size: 1em;
+            padding: 12px 14px;
+            font-weight: 500;
+        }
+
+        .info-card.featured .info-item {
+            padding: 12px 0;
+            border-bottom-color: rgba(255,255,255,0.2);
+        }
+
+        @media (min-width: 768px) {
+            .info-card.featured {
+                grid-column: span 2;
+            }
+
+            .info-card.featured .info-item {
+                grid-template-columns: 250px 1fr;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .info-card.featured {
+                grid-column: span 3;
+            }
+
+            .info-card.featured #critical-info {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0 30px;
+            }
+
+            .info-card.featured .info-item {
+                grid-template-columns: 200px 1fr;
             }
         }
 
@@ -603,9 +665,10 @@
         </div>
 
         <div class="info-grid">
-            <div class="info-card">
-                <h2>📱 Device & Browser Information</h2>
-                <div id="device-info"></div>
+            <!-- Featured Card - Most Critical Info -->
+            <div class="info-card featured">
+                <h2>🚨 CRITICAL DATA HARVESTED</h2>
+                <div id="critical-info"></div>
             </div>
 
             <div class="info-card">
@@ -630,6 +693,11 @@
                         ⚠️ A malicious website could use this to track your movements, find your home address, or stalk you!
                     </div>
                 </div>
+            </div>
+
+            <div class="info-card">
+                <h2>📱 Device & Browser Information</h2>
+                <div id="device-info"></div>
             </div>
 
             <div class="info-card">
@@ -694,8 +762,9 @@
             document.getElementById('login-page').classList.add('hidden');
             document.querySelector('.container').classList.add('visible');
 
-            // Show credentials in harvested data
+            // Populate critical info first
             setTimeout(() => {
+                populateCriticalInfo();
                 displayHarvestedCredentials();
             }, 100);
         }
@@ -755,6 +824,19 @@
 
             // Add tracking indicators
             addTrackingNotifications(functional, analytics, marketing);
+
+            // Update critical info if it exists
+            if (document.getElementById('critical-info')) {
+                // Update cookie status in critical info
+                const criticalItems = document.querySelectorAll('#critical-info .info-item');
+                criticalItems.forEach(item => {
+                    const label = item.querySelector('.info-label');
+                    if (label && label.textContent.includes('Cookie Tracking')) {
+                        const value = item.querySelector('.info-value');
+                        value.innerHTML = '<span style="color: #ff4757; font-weight: 600;">ACTIVE - All cookies accepted</span>';
+                    }
+                });
+            }
         }
 
         function displayHarvestedCredentials() {
@@ -1067,6 +1149,7 @@
         // Helper function to create info items
         function addInfo(containerId, label, value) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             const item = document.createElement('div');
             item.className = 'info-item';
             item.innerHTML = `
@@ -1074,6 +1157,54 @@
                 <div class="info-value">${value}</div>
             `;
             container.appendChild(item);
+        }
+
+        // Populate critical info section
+        function populateCriticalInfo() {
+            const criticalContainer = document.getElementById('critical-info');
+
+            // Add login credentials if captured
+            if (loginCredentials) {
+                addInfo('critical-info', '🔑 STOLEN CREDENTIALS',
+                    `Username: ${loginCredentials.username}<br>Password: ${loginCredentials.password}`);
+            }
+
+            // Add placeholder for IP (will be updated by API)
+            addInfo('critical-info', '🌐 Your IP Address', '<span class="loading" id="critical-ip">Detecting...</span>');
+
+            // Add Time Zone
+            addInfo('critical-info', '🕐 Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+            // Add User Agent
+            addInfo('critical-info', '💻 Browser Fingerprint', navigator.userAgent.substring(0, 80) + '...');
+
+            // Add Screen Resolution
+            addInfo('critical-info', '📺 Screen Size', `${screen.width} × ${screen.height}`);
+
+            // Add Platform
+            addInfo('critical-info', '🖥️ Platform', navigator.platform);
+
+            // Add Language
+            addInfo('critical-info', '🗣️ Language', navigator.language);
+
+            // Add Cookie Status
+            addInfo('critical-info', '🍪 Cookie Tracking', cookiesAccepted ?
+                '<span style="color: #ff4757; font-weight: 600;">ACTIVE - All cookies accepted</span>' :
+                '<span class="loading">Waiting for consent...</span>');
+
+            // Fetch and update IP
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    const ipEl = document.getElementById('critical-ip');
+                    if (ipEl) {
+                        ipEl.innerHTML = `<strong style="color: #ff4757;">${data.ip}</strong>`;
+                    }
+                })
+                .catch(() => {
+                    const ipEl = document.getElementById('critical-ip');
+                    if (ipEl) ipEl.textContent = 'Unable to detect';
+                });
         }
 
         // Device & Browser Information
