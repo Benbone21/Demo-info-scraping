@@ -1,93 +1,96 @@
-# Browser Data Demonstration - React App
+# Browser Data Demonstration
 
-This is an educational demonstration showing what information browsers expose to websites, converted to a React application.
+Educational demonstration showing what information browsers expose to websites.
 
 ## Features
 
-- Cookie consent modal with tracking options
-- Interactive map showing exact geolocation
-- Real-time data collection displays
-- Comprehensive browser fingerprinting demonstration
-- Educational content about QR code and privacy risks
+- Simple cookie consent (Accept/Decline)
+- Interactive map with geolocation
+- Real-time data collection
+- Browser fingerprinting demonstration
+- Privacy risk education
+- Data-dense, compact display
 
-## Installation
+## Quick Start
 
 1. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Start the development server:
+2. Start development server:
 ```bash
 npm start
 ```
 
-The app will open at [http://localhost:3000](http://localhost:3000)
+Opens at [http://localhost:3000](http://localhost:3000)
 
-## Building for Production
-
+3. Build for production:
 ```bash
 npm run build
 ```
 
-This creates an optimized production build in the `build` folder.
+## Deploy to Cloudflare Pages
+
+See [DEPLOY.md](DEPLOY.md) for detailed instructions.
+
+### Quick Deploy
+
+**Option 1: GitHub Integration**
+1. Push code to GitHub
+2. Connect repository in Cloudflare Pages
+3. Set build command: `npm run build`
+4. Set output directory: `build`
+
+**Option 2: Direct Upload**
+```bash
+npm run build
+```
+Then upload the `build` folder to Cloudflare Pages dashboard.
+
+**Option 3: Wrangler CLI**
+```bash
+npm install -g wrangler
+wrangler login
+npm run build
+wrangler pages publish build --project-name=demo-info-scraping
+```
 
 ## Project Structure
 
 ```
 src/
-├── App.jsx                 # Main application component
-├── App.css                 # Main styles
+├── App.jsx                 # Main app
 ├── components/
-│   ├── CookieConsent.jsx   # Cookie consent modal
-│   ├── TrackingIndicator.jsx  # Active tracking indicator
-│   ├── WarningBanner.jsx   # Top warning banner
-│   ├── RiskEducation.jsx   # Educational content
-│   ├── LocationInfo.jsx    # Location data with interactive map
-│   ├── DeviceInfo.jsx      # Device & browser information
-│   ├── HardwareInfo.jsx    # Hardware specifications
-│   ├── PrivacyInfo.jsx     # Privacy settings
-│   ├── FingerprintInfo.jsx # Browser fingerprinting
-│   ├── NetworkInfo.jsx     # Network & IP information
-│   ├── FeaturesInfo.jsx    # Browser features
-│   ├── SensorsInfo.jsx     # Sensors & permissions
-│   ├── StorageInfo.jsx     # Storage & quotas
-│   └── InfoItem.jsx        # Reusable info display component
-└── index.js                # Application entry point
+│   ├── CookieConsent.jsx   # Simple cookie modal
+│   ├── LocationInfo.jsx    # Location with map
+│   ├── DeviceInfo.jsx      # Device data
+│   ├── HardwareInfo.jsx    # Hardware specs
+│   ├── NetworkInfo.jsx     # Network & IP
+│   ├── FingerprintInfo.jsx # Browser fingerprint
+│   └── ...                 # Other components
 ```
 
-## Differences from HTML Version
+## What Data is Collected
 
-The React version includes:
-- Component-based architecture for better code organization
-- React hooks for state management
-- React Leaflet for the interactive map
-- Modular CSS files for each component
-- Better separation of concerns
-
-## Key Components
-
-### CookieConsent
-Displays the cookie consent modal and manages user preferences.
-
-### LocationInfo
-Shows location data and renders an interactive map using React Leaflet when location permission is granted.
-
-### Info Components
-Each info component (DeviceInfo, HardwareInfo, etc.) collects and displays specific browser data.
+- Device & Browser: User agent, platform, language
+- Location: Time zone, IP geolocation, GPS (if granted)
+- Hardware: Screen resolution, CPU cores, memory
+- Network: IP address, ISP, connection type
+- Fingerprinting: Canvas hash, fonts, WebGL
+- Tracking: Mouse movements, scroll behavior
 
 ## Privacy Note
 
-This is an **educational demonstration only**. No data is sent to any server. All data collection happens client-side in your browser to demonstrate what websites *could* collect.
+**All data collection is client-side only.** Nothing is sent to any server. This is purely educational to demonstrate what websites *can* collect.
 
-## Technologies Used
+## Technologies
 
 - React 18
-- React Leaflet (for maps)
-- Leaflet
-- OpenStreetMap (for map tiles)
-- Various browser APIs for data collection
+- React Leaflet (maps)
+- OpenStreetMap
+- Browser APIs
 
 ## License
 
-This project is for educational purposes only.
+Educational use only
