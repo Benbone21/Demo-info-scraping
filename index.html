@@ -24,6 +24,11 @@
         .container {
             max-width: 1800px;
             margin: 0 auto;
+            display: none; /* Hidden until login */
+        }
+
+        .container.visible {
+            display: block;
         }
 
         .warning-banner {
@@ -305,6 +310,95 @@
             display: none;
         }
 
+        /* Login page styles */
+        .login-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .login-container h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .login-container .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+
+        .login-form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #5568d3;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.85em;
+        }
+
         /* Tracking indicator */
         .tracking-indicator {
             position: fixed;
@@ -425,60 +519,48 @@
         🔴 TRACKING ACTIVE
     </div>
 
-    <!-- Cookie Consent Modal -->
-    <div id="cookie-overlay" class="cookie-overlay">
-        <div class="cookie-modal">
-            <h2>🍪 We Value Your Privacy</h2>
-            <p>
-                We use cookies and similar technologies to enhance your browsing experience,
-                analyze site traffic, and provide personalized content. By accepting, you agree
-                to the collection and use of your data as described below.
-            </p>
+    <!-- Login Page -->
+    <div id="login-page" class="login-page">
+        <div class="login-container">
+            <h1>🔒 Secure Login</h1>
+            <p class="subtitle">Sign in to continue to your account</p>
 
-            <div class="cookie-options">
-                <div class="cookie-option">
-                    <input type="checkbox" id="cookie-essential" checked disabled>
-                    <label for="cookie-essential">
-                        <strong>Essential Cookies</strong>
-                        <small>Required for basic site functionality (cannot be disabled)</small>
-                    </label>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="login-form-group">
+                    <label for="username">Email or Username</label>
+                    <input type="text" id="username" name="username" required autocomplete="username">
                 </div>
 
-                <div class="cookie-option">
-                    <input type="checkbox" id="cookie-functional" checked>
-                    <label for="cookie-functional">
-                        <strong>Functional Cookies</strong>
-                        <small>Enable enhanced features like geolocation and device sensors</small>
-                    </label>
+                <div class="login-form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
                 </div>
 
-                <div class="cookie-option">
-                    <input type="checkbox" id="cookie-analytics" checked>
-                    <label for="cookie-analytics">
-                        <strong>Analytics Cookies</strong>
-                        <small>Help us understand how you interact with our site</small>
-                    </label>
+                <button type="submit" class="login-btn">Sign In</button>
+
+                <div class="login-footer">
+                    By signing in, you agree to our Terms of Service
+                </div>
+            </form>
+        </div>
+
+        <!-- Deceptive Cookie Consent Modal on Login Page -->
+        <div id="cookie-overlay" class="cookie-overlay">
+            <div class="cookie-modal">
+                <h2>🍪 We Value Your Privacy</h2>
+                <p>
+                    We use cookies to improve your experience. Click continue to proceed.
+                </p>
+
+                <div class="cookie-buttons">
+                    <button class="cookie-btn cookie-btn-decline" onclick="acceptCookies()">Manage Settings</button>
+                    <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept & Continue</button>
                 </div>
 
-                <div class="cookie-option">
-                    <input type="checkbox" id="cookie-marketing" checked>
-                    <label for="cookie-marketing">
-                        <strong>Marketing Cookies</strong>
-                        <small>Used to track visitors and display personalized ads</small>
-                    </label>
-                </div>
+                <small class="legal">
+                    By continuing, you agree to our use of cookies and data collection.
+                </small>
             </div>
-
-            <div class="cookie-buttons">
-                <button class="cookie-btn cookie-btn-decline" onclick="declineCookies()">Decline All</button>
-                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
-            </div>
-
-            <small class="legal">
-                By clicking "Accept All", you consent to our collection and processing of your personal data
-                including IP address, device information, browsing behavior, and location data.
-                This data may be shared with third-party partners for marketing purposes.
-            </small>
         </div>
     </div>
     <div class="container">
@@ -486,6 +568,24 @@
             <h1>⚠️ DATA HARVESTED ⚠️</h1>
             <p>This page has collected the following information from your browser</p>
             <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">(This is a demonstration - no data is being sent anywhere)</p>
+        </div>
+
+        <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 15px; background: #ffebee; border-left: 4px solid #d32f2f;">
+            <h2 style="color: #c62828;">⚠️ What Just Happened</h2>
+            <div style="color: #333; line-height: 1.5; font-size: 1em;">
+                <p style="margin-bottom: 10px;">
+                    <strong>1. Fake Login Page:</strong> You just entered credentials on what looked like a legitimate login form. A malicious site would now have your username and password.
+                </p>
+                <p style="margin-bottom: 10px;">
+                    <strong>2. Deceptive Cookie Consent:</strong> Both buttons ("Manage Settings" and "Accept & Continue") accepted ALL cookies. This is a dark pattern - giving users fake choices.
+                </p>
+                <p style="margin-bottom: 10px;">
+                    <strong>3. Automatic Data Collection:</strong> Even before you clicked anything, this page collected your IP, browser fingerprint, device info, and more.
+                </p>
+                <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; margin-top: 10px; border-left: 3px solid #2196f3; font-size: 0.95em;">
+                    <strong>Educational Demo:</strong> This is a demonstration - no data leaves your browser. Real phishing sites would send everything to attackers' servers instantly.
+                </div>
+            </div>
         </div>
 
         <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 15px; background: #fff3cd; border-left: 4px solid #ffc107;">
@@ -497,11 +597,8 @@
                     <strong>Cookie Consent Tricks:</strong> Pre-checked boxes, confusing language, dark patterns, unnecessary permissions.
                 </p>
                 <p style="margin-bottom: 10px;">
-                    <strong>Protection:</strong> Verify QR sources • Decline cookies by default • Deny permissions • Use privacy browsers (Firefox/Brave) • Install uBlock Origin/Privacy Badger • Enable VPN • Disable 3rd-party cookies
+                    <strong>Protection:</strong> Verify QR sources • Decline cookies by default • Deny permissions • Use privacy browsers (Firefox/Brave) • Install uBlock Origin/Privacy Badger • Enable VPN • Disable 3rd-party cookies • Never enter real credentials on unfamiliar sites
                 </p>
-                <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; margin-top: 10px; border-left: 3px solid #2196f3; font-size: 0.95em;">
-                    <strong>Note:</strong> This page is educational - no data is transmitted. Real malicious sites would send everything to servers. All data below was collected automatically on page load.
-                </div>
             </div>
         </div>
 
@@ -577,11 +674,38 @@
         let cookiesAccepted = false;
         let map = null;
         let marker = null;
+        let loginCredentials = null;
+
+        // Handle login form
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Store credentials (maliciously harvested!)
+            loginCredentials = {
+                username: username,
+                password: password,
+                timestamp: new Date().toISOString()
+            };
+
+            // Hide login page and show main content
+            document.getElementById('login-page').classList.add('hidden');
+            document.querySelector('.container').classList.add('visible');
+
+            // Show credentials in harvested data
+            setTimeout(() => {
+                displayHarvestedCredentials();
+            }, 100);
+        }
 
         function acceptCookies() {
-            const functional = document.getElementById('cookie-functional').checked;
-            const analytics = document.getElementById('cookie-analytics').checked;
-            const marketing = document.getElementById('cookie-marketing').checked;
+            // BOTH BUTTONS ACCEPT COOKIES - Dark Pattern Example!
+            // Users think they can decline, but both options accept everything
+            const functional = true;
+            const analytics = true;
+            const marketing = true;
 
             cookiesAccepted = true;
 
@@ -592,7 +716,8 @@
                     functional: functional,
                     analytics: analytics,
                     marketing: marketing,
-                    timestamp: new Date().toISOString()
+                    timestamp: new Date().toISOString(),
+                    darkPattern: true  // Flag showing deception
                 }));
 
                 // Set various tracking cookies (demonstrative)
@@ -603,15 +728,9 @@
                 document.cookie = `session_id=${sessionId}; path=/`;
                 document.cookie = `_ga=${Math.random().toString(36).substr(2)}; max-age=63072000; path=/`; // Google Analytics style
                 document.cookie = `_fbp=${Math.random().toString(36).substr(2)}; max-age=7776000; path=/`; // Facebook Pixel style
-
-                if (analytics) {
-                    document.cookie = `analytics_tracking=enabled; max-age=31536000; path=/`;
-                }
-
-                if (marketing) {
-                    document.cookie = `marketing_id=${Math.random().toString(36).substr(2)}; max-age=31536000; path=/`;
-                    document.cookie = `ad_targeting=enabled; max-age=31536000; path=/`;
-                }
+                document.cookie = `analytics_tracking=enabled; max-age=31536000; path=/`;
+                document.cookie = `marketing_id=${Math.random().toString(36).substr(2)}; max-age=31536000; path=/`;
+                document.cookie = `ad_targeting=enabled; max-age=31536000; path=/`;
 
                 // Store tracking IDs
                 localStorage.setItem('user_tracking_id', userId);
@@ -624,43 +743,44 @@
             document.getElementById('cookie-overlay').classList.add('hidden');
 
             // Show tracking indicator
-            if (functional || analytics || marketing) {
-                document.getElementById('tracking-indicator').classList.add('active');
-            }
+            document.getElementById('tracking-indicator').classList.add('active');
 
-            // Request additional permissions if functional cookies are accepted
-            if (functional) {
-                setTimeout(() => {
-                    requestAdditionalPermissions();
-                }, 500);
-            }
+            // Request additional permissions
+            setTimeout(() => {
+                requestAdditionalPermissions();
+            }, 500);
 
-            // Start enhanced tracking if analytics enabled
-            if (analytics) {
-                startAnalyticsTracking();
-            }
+            // Start enhanced tracking
+            startAnalyticsTracking();
 
             // Add tracking indicators
             addTrackingNotifications(functional, analytics, marketing);
         }
 
-        function declineCookies() {
-            cookiesAccepted = false;
+        function displayHarvestedCredentials() {
+            if (!loginCredentials) return;
 
-            try {
-                localStorage.setItem('cookie-consent', JSON.stringify({
-                    essential: true,
-                    functional: false,
-                    analytics: false,
-                    marketing: false,
-                    timestamp: new Date().toISOString()
-                }));
-            } catch (e) {}
+            // Add prominent warning at the top of the page
+            const warningBox = document.createElement('div');
+            warningBox.style.cssText = 'background: #ffcdd2; border: 3px solid #d32f2f; padding: 20px; margin-bottom: 20px; border-radius: 8px; animation: fadeIn 0.5s ease-out;';
+            warningBox.innerHTML = `
+                <h2 style="color: #d32f2f; margin: 0 0 15px 0; font-size: 1.5em;">🚨 YOUR LOGIN CREDENTIALS WERE CAPTURED! 🚨</h2>
+                <div style="background: white; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace;">
+                    <p style="margin: 8px 0;"><strong>Username/Email:</strong> <span style="color: #d32f2f; font-weight: 600;">${loginCredentials.username}</span></p>
+                    <p style="margin: 8px 0;"><strong>Password:</strong> <span style="color: #d32f2f; font-weight: 600;">${loginCredentials.password}</span></p>
+                    <p style="margin: 8px 0;"><strong>Captured At:</strong> ${new Date(loginCredentials.timestamp).toLocaleString()}</p>
+                </div>
+                <p style="margin-top: 15px; color: #b71c1c; font-weight: 600; font-size: 1.05em;">
+                    ⚠️ A malicious site would now have access to your account! Never enter real credentials on suspicious sites.
+                </p>
+            `;
 
-            document.getElementById('cookie-overlay').classList.add('hidden');
+            const container = document.querySelector('.container');
+            const warningBanner = document.querySelector('.warning-banner');
+            container.insertBefore(warningBox, warningBanner.nextSibling);
 
-            // Show what's still being collected
-            addInfo('privacy-info', 'Cookie Consent', 'Declined - but essential data still collected');
+            // Also add to privacy info section
+            addInfo('privacy-info', '🔑 Login Credentials STOLEN', `Username: ${loginCredentials.username}<br>Password: ${loginCredentials.password}`);
         }
 
         function displayLocationOnMap(position, enableTracking = false) {
@@ -888,6 +1008,9 @@
         }
 
         function addTrackingNotifications(functional, analytics, marketing) {
+            // Add dark pattern notification
+            addInfo('privacy-info', '⚠️ Cookie Dark Pattern', 'BOTH buttons accepted ALL cookies - deceptive design!');
+
             if (functional) {
                 addInfo('privacy-info', '🔴 Functional Tracking', 'ACTIVE - Collecting location, sensors, device data');
             }
@@ -900,21 +1023,28 @@
 
             // Show what accepting cookies enabled
             const warningBox = document.createElement('div');
-            warningBox.style.cssText = 'background: #ffebee; border-left: 4px solid #d32f2f; padding: 15px; margin-bottom: 20px; border-radius: 5px;';
+            warningBox.style.cssText = 'background: #ffebee; border-left: 4px solid #d32f2f; padding: 20px; margin-bottom: 20px; border-radius: 8px;';
             warningBox.innerHTML = `
-                <strong style="color: #d32f2f;">⚠️ By accepting cookies, you just granted permission to:</strong>
+                <strong style="color: #d32f2f; font-size: 1.2em;">🚨 COOKIE DARK PATTERN DETECTED!</strong>
+                <p style="margin: 10px 0; font-size: 1.05em;">
+                    <strong>You clicked:</strong> "${event.target.textContent}" but ALL cookies were accepted regardless!
+                </p>
+                <p style="margin: 10px 0; background: #fff; padding: 12px; border-radius: 6px;">
+                    This is a <strong>dark pattern</strong> - a deceptive design that tricks users into accepting everything
+                    even when they think they're declining. Real malicious sites use this technique.
+                </p>
+                <strong style="color: #d32f2f;">⚠️ What was activated:</strong>
                 <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
-                    ${functional ? '<li>Access your precise location</li>' : ''}
-                    ${functional ? '<li>Read device sensors (motion, orientation)</li>' : ''}
-                    ${analytics ? '<li>Track every mouse movement and click</li>' : ''}
-                    ${analytics ? '<li>Record how long you spend on this page</li>' : ''}
-                    ${marketing ? '<li>Build a detailed profile for targeted advertising</li>' : ''}
-                    ${marketing ? '<li>Share your data with third-party advertisers</li>' : ''}
-                    <li><strong>Store this data indefinitely</strong></li>
+                    <li>Access to your precise location</li>
+                    <li>Read device sensors (motion, orientation)</li>
+                    <li>Track every mouse movement and click</li>
+                    <li>Record how long you spend on this page</li>
+                    <li>Build a detailed profile for targeted advertising</li>
+                    <li>Share your data with third-party advertisers</li>
+                    <li>Store this data indefinitely</li>
                     <li>Set multiple tracking cookies (user ID, session ID, analytics IDs)</li>
-                    <li>Store unique identifiers in localStorage</li>
                 </ul>
-                <p style="margin-top: 15px; padding: 10px; background: #fff; border-radius: 5px; font-size: 0.9em;">
+                <p style="margin-top: 15px; padding: 12px; background: #fff; border-radius: 6px; font-size: 1em;">
                     <strong>Cookies set:</strong> ${document.cookie.split(';').length} tracking cookies are now active on your device.
                     Check the "Storage & Quotas" section below to see them.
                 </p>
