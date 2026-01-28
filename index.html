@@ -24,11 +24,6 @@
         .container {
             max-width: 1800px;
             margin: 0 auto;
-            display: none; /* Hidden until login */
-        }
-
-        .container.visible {
-            display: block;
         }
 
         .warning-banner {
@@ -372,94 +367,6 @@
             display: none;
         }
 
-        /* Login page styles */
-        .login-page {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10001;
-            padding: 20px;
-        }
-
-        .login-container {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        }
-
-        .login-container h1 {
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 2em;
-            text-align: center;
-        }
-
-        .login-container .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1em;
-        }
-
-        .login-form-group {
-            margin-bottom: 20px;
-        }
-
-        .login-form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-            font-size: 0.95em;
-        }
-
-        .login-form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1em;
-            transition: border-color 0.3s;
-        }
-
-        .login-form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-
-        .login-btn:hover {
-            background: #5568d3;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #999;
-            font-size: 0.85em;
-        }
 
         /* Tracking indicator */
         .tracking-indicator {
@@ -581,50 +488,6 @@
         🔴 TRACKING ACTIVE
     </div>
 
-    <!-- Login Page -->
-    <div id="login-page" class="login-page">
-        <div class="login-container">
-            <h1>🔒 Secure Login</h1>
-            <p class="subtitle">Sign in to continue to your account</p>
-
-            <form id="login-form" onsubmit="handleLogin(event)">
-                <div class="login-form-group">
-                    <label for="username">Email or Username</label>
-                    <input type="text" id="username" name="username" required autocomplete="username">
-                </div>
-
-                <div class="login-form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required autocomplete="current-password">
-                </div>
-
-                <button type="submit" class="login-btn">Sign In</button>
-
-                <div class="login-footer">
-                    By signing in, you agree to our Terms of Service
-                </div>
-            </form>
-        </div>
-
-        <!-- Deceptive Cookie Consent Modal on Login Page -->
-        <div id="cookie-overlay" class="cookie-overlay">
-            <div class="cookie-modal">
-                <h2>🍪 We Value Your Privacy</h2>
-                <p>
-                    We use cookies to improve your experience. Click continue to proceed.
-                </p>
-
-                <div class="cookie-buttons">
-                    <button class="cookie-btn cookie-btn-decline" onclick="acceptCookies()">Manage Settings</button>
-                    <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept & Continue</button>
-                </div>
-
-                <small class="legal">
-                    By continuing, you agree to our use of cookies and data collection.
-                </small>
-            </div>
-        </div>
-    </div>
     <div class="container">
         <div class="warning-banner">
             <h1>⚠️ DATA HARVESTED ⚠️</h1>
@@ -744,30 +607,21 @@
         let marker = null;
         let loginCredentials = null;
 
-        // Handle login form
-        function handleLogin(event) {
-            event.preventDefault();
+        // Load harvested credentials from localStorage (from login page)
+        try {
+            const storedCreds = localStorage.getItem('harvested-credentials');
+            if (storedCreds) {
+                loginCredentials = JSON.parse(storedCreds);
+            }
+        } catch (e) {}
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            // Store credentials (maliciously harvested!)
-            loginCredentials = {
-                username: username,
-                password: password,
-                timestamp: new Date().toISOString()
-            };
-
-            // Hide login page and show main content
-            document.getElementById('login-page').classList.add('hidden');
-            document.querySelector('.container').classList.add('visible');
-
-            // Populate critical info first
-            setTimeout(() => {
-                populateCriticalInfo();
+        // Initialize critical info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            populateCriticalInfo();
+            if (loginCredentials) {
                 displayHarvestedCredentials();
-            }, 100);
-        }
+            }
+        });
 
         function acceptCookies() {
             // BOTH BUTTONS ACCEPT COOKIES - Dark Pattern Example!

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-size: 16px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        .login-container h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .login-container .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1em;
+        }
+
+        .login-form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #5568d3;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        /* Cookie consent modal */
+        .cookie-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .cookie-modal {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .cookie-modal h2 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1.4em;
+        }
+
+        .cookie-modal p {
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            font-size: 1em;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .cookie-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cookie-btn-accept {
+            background: #667eea;
+            color: white;
+        }
+
+        .cookie-btn-accept:hover {
+            background: #5568d3;
+        }
+
+        .cookie-btn-decline {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .cookie-btn-decline:hover {
+            background: #d0d0d0;
+        }
+
+        .cookie-modal small.legal {
+            display: block;
+            margin-top: 15px;
+            color: #999;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔒 Secure Login</h1>
+        <p class="subtitle">Sign in to continue to your account</p>
+
+        <form id="login-form" onsubmit="handleLogin(event)">
+            <div class="login-form-group">
+                <label for="username">Email or Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username">
+            </div>
+
+            <div class="login-form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="login-btn">Sign In</button>
+
+            <div class="login-footer">
+                By signing in, you agree to our Terms of Service
+            </div>
+        </form>
+    </div>
+
+    <!-- Deceptive Cookie Consent Modal -->
+    <div id="cookie-overlay" class="cookie-overlay">
+        <div class="cookie-modal">
+            <h2>🍪 We Value Your Privacy</h2>
+            <p>
+                We use cookies to improve your experience. Click continue to proceed.
+            </p>
+
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-btn-decline" onclick="acceptCookies()">Manage Settings</button>
+                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept & Continue</button>
+            </div>
+
+            <small class="legal">
+                By continuing, you agree to our use of cookies and data collection.
+            </small>
+        </div>
+    </div>
+
+    <script>
+        // Handle cookie consent (both buttons accept all cookies - dark pattern!)
+        function acceptCookies() {
+            // BOTH BUTTONS ACCEPT COOKIES - Dark Pattern Example!
+            try {
+                localStorage.setItem('cookie-consent', JSON.stringify({
+                    essential: true,
+                    functional: true,
+                    analytics: true,
+                    marketing: true,
+                    timestamp: new Date().toISOString(),
+                    darkPattern: true
+                }));
+
+                // Set various tracking cookies
+                const userId = 'user_' + Math.random().toString(36).substr(2, 9);
+                const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+
+                document.cookie = `user_id=${userId}; max-age=31536000; path=/`;
+                document.cookie = `session_id=${sessionId}; path=/`;
+                document.cookie = `_ga=${Math.random().toString(36).substr(2)}; max-age=63072000; path=/`;
+                document.cookie = `_fbp=${Math.random().toString(36).substr(2)}; max-age=7776000; path=/`;
+                document.cookie = `analytics_tracking=enabled; max-age=31536000; path=/`;
+                document.cookie = `marketing_id=${Math.random().toString(36).substr(2)}; max-age=31536000; path=/`;
+                document.cookie = `ad_targeting=enabled; max-age=31536000; path=/`;
+
+                localStorage.setItem('user_tracking_id', userId);
+                localStorage.setItem('session_id', sessionId);
+                localStorage.setItem('first_visit', new Date().toISOString());
+            } catch (e) {}
+
+            // Hide modal
+            document.getElementById('cookie-overlay').classList.add('hidden');
+        }
+
+        // Handle login form submission
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Store credentials in localStorage (maliciously harvested!)
+            try {
+                localStorage.setItem('harvested-credentials', JSON.stringify({
+                    username: username,
+                    password: password,
+                    timestamp: new Date().toISOString()
+                }));
+            } catch (e) {}
+
+            // Redirect to harvested data page
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
