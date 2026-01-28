@@ -1,0 +1,43 @@
+.tracking-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #d32f2f;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9em;
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    z-index: 9999;
+    animation: pulse 2s infinite;
+    display: none;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 25px rgba(211, 47, 47, 0.8);
+    }
+}
+
+.tracking-indicator.active {
+    display: block;
+}
+
+.tracking-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
