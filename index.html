@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browser Data Demonstration</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .warning-banner {
+            background: #ff4757;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .warning-banner h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .warning-banner p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 20px;
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .info-item {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .info-value {
+            color: #333;
+            word-break: break-word;
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            color: #999;
+            font-style: italic;
+        }
+
+        .permission-needed {
+            color: #ff4757;
+            font-style: italic;
+        }
+
+        .request-permission-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+
+        .request-permission-btn:hover {
+            background: #5568d3;
+        }
+
+        @media (max-width: 600px) {
+            .info-item {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .warning-banner h1 {
+                font-size: 1.8em;
+            }
+        }
+
+        /* Cookie consent modal */
+        .cookie-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .cookie-modal {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            max-width: 600px;
+            margin: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .cookie-modal h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        .cookie-modal p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .cookie-options {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .cookie-option {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            padding: 8px;
+        }
+
+        .cookie-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .cookie-option label {
+            color: #333;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .cookie-option small {
+            display: block;
+            color: #666;
+            margin-top: 4px;
+            font-size: 0.85em;
+        }
+
+        .cookie-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .cookie-btn {
+            flex: 1;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cookie-btn-accept {
+            background: #667eea;
+            color: white;
+        }
+
+        .cookie-btn-accept:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .cookie-btn-decline {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        .cookie-btn-decline:hover {
+            background: #d0d0d0;
+        }
+
+        .cookie-modal small.legal {
+            display: block;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.75em;
+            line-height: 1.4;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Tracking indicator */
+        .tracking-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #d32f2f;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+            z-index: 9999;
+            animation: pulse 2s infinite;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
+            }
+            50% {
+                box-shadow: 0 4px 25px rgba(211, 47, 47, 0.8);
+            }
+        }
+
+        .tracking-indicator.active {
+            display: block;
+        }
+
+        .tracking-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Map container */
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .map-container.visible {
+            display: block;
+        }
+
+        #location-map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .location-info-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #d32f2f;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .location-info-box.visible {
+            display: block;
+        }
+
+        .location-info-box h3 {
+            margin: 0 0 10px 0;
+            color: #d32f2f;
+            font-size: 1.1em;
+        }
+
+        .location-info-box p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .location-info-box .coordinates {
+            font-family: 'Courier New', monospace;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+
+        .map-warning {
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #c62828;
+            font-size: 0.9em;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tracking Indicator -->
+    <div id="tracking-indicator" class="tracking-indicator">
+        <span class="tracking-dot"></span>
+        🔴 TRACKING ACTIVE
+    </div>
+
+    <!-- Cookie Consent Modal -->
+    <div id="cookie-overlay" class="cookie-overlay">
+        <div class="cookie-modal">
+            <h2>🍪 We Value Your Privacy</h2>
+            <p>
+                We use cookies and similar technologies to enhance your browsing experience,
+                analyze site traffic, and provide personalized content. By accepting, you agree
+                to the collection and use of your data as described below.
+            </p>
+
+            <div class="cookie-options">
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-essential" checked disabled>
+                    <label for="cookie-essential">
+                        <strong>Essential Cookies</strong>
+                        <small>Required for basic site functionality (cannot be disabled)</small>
+                    </label>
+                </div>
+
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-functional" checked>
+                    <label for="cookie-functional">
+                        <strong>Functional Cookies</strong>
+                        <small>Enable enhanced features like geolocation and device sensors</small>
+                    </label>
+                </div>
+
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-analytics" checked>
+                    <label for="cookie-analytics">
+                        <strong>Analytics Cookies</strong>
+                        <small>Help us understand how you interact with our site</small>
+                    </label>
+                </div>
+
+                <div class="cookie-option">
+                    <input type="checkbox" id="cookie-marketing" checked>
+                    <label for="cookie-marketing">
+                        <strong>Marketing Cookies</strong>
+                        <small>Used to track visitors and display personalized ads</small>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cookie-buttons">
+                <button class="cookie-btn cookie-btn-decline" onclick="declineCookies()">Decline All</button>
+                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">Accept All</button>
+            </div>
+
+            <small class="legal">
+                By clicking "Accept All", you consent to our collection and processing of your personal data
+                including IP address, device information, browsing behavior, and location data.
+                This data may be shared with third-party partners for marketing purposes.
+            </small>
+        </div>
+    </div>
+    <div class="container">
+        <div class="warning-banner">
+            <h1>⚠️ DATA HARVESTED ⚠️</h1>
+            <p>This page has collected the following information from your browser</p>
+            <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">(This is a demonstration - no data is being sent anywhere)</p>
+        </div>
+
+        <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 30px; background: #fff3cd; border-left: 5px solid #ffc107;">
+            <h2 style="color: #856404;">🛡️ Understanding the Risks</h2>
+            <div style="color: #333; line-height: 1.8;">
+                <h3 style="margin-top: 15px; margin-bottom: 10px; color: #d32f2f; font-size: 1.2em;">Why Random QR Codes Are Dangerous</h3>
+                <p style="margin-bottom: 15px;">
+                    <strong>QR codes are just links in disguise.</strong> When you scan a QR code, you're trusting whoever created it with your device's safety.
+                    Here's what can happen:
+                </p>
+                <ul style="margin-left: 25px; margin-bottom: 20px;">
+                    <li><strong>Phishing Attacks:</strong> Malicious QR codes can redirect you to fake login pages that steal your credentials (banking, email, social media).</li>
+                    <li><strong>Malware Installation:</strong> Some QR codes trigger automatic downloads of malicious apps or files.</li>
+                    <li><strong>Financial Scams:</strong> QR codes can initiate unauthorized payments or crypto transfers.</li>
+                    <li><strong>Location Tracking:</strong> Once you visit a link, the website knows your IP address, approximate location, and can track your movements.</li>
+                    <li><strong>Data Harvesting:</strong> As this page demonstrates, websites can collect extensive information about you without any visible indication.</li>
+                </ul>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #d32f2f; font-size: 1.2em;">What Websites Can Learn About You</h3>
+                <p style="margin-bottom: 15px;">
+                    Just by visiting a website (like you did by scanning that QR code), the site can collect:
+                </p>
+                <ul style="margin-left: 25px; margin-bottom: 20px;">
+                    <li><strong>Your Real Identity:</strong> IP address reveals your ISP, city, postal code, and can often be linked back to you personally.</li>
+                    <li><strong>Your Device Fingerprint:</strong> A unique identifier created from your screen size, fonts, browser version, plugins, GPU info, etc. This can track you across websites even without cookies.</li>
+                    <li><strong>Your Location:</strong> Time zone, language, and IP-based geolocation can pinpoint where you are.</li>
+                    <li><strong>Your Hardware:</strong> Device type, OS version, CPU cores, memory, battery level, sensors available.</li>
+                    <li><strong>Your Behavior:</strong> Mouse movements, scroll patterns, typing rhythm can identify you uniquely (behavioral biometrics).</li>
+                    <li><strong>Your Network:</strong> WebRTC can leak your real local IP address even if you're using a VPN.</li>
+                    <li><strong>Your Privacy Settings:</strong> Ad blocker usage, private mode detection, cookie preferences.</li>
+                </ul>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #d32f2f; font-size: 1.2em;">The Cookie Consent Trap</h3>
+                <p style="margin-bottom: 15px;">
+                    <strong>Most people click "Accept All" without reading.</strong> Cookie consent popups are designed to make accepting
+                    easier than declining. Notice how the "Accept" button is often bigger, brighter, and positioned first?
+                </p>
+                <ul style="margin-left: 25px; margin-bottom: 20px;">
+                    <li><strong>Pre-checked boxes:</strong> All tracking options are enabled by default - you have to manually opt-out.</li>
+                    <li><strong>Confusing language:</strong> Terms like "functional" and "analytics" sound harmless but enable extensive tracking.</li>
+                    <li><strong>Dark patterns:</strong> Declining is made difficult - multiple clicks, hidden options, or warning messages.</li>
+                    <li><strong>Unnecessary permissions:</strong> Accepting cookies can trigger requests for location, notifications, and sensors.</li>
+                    <li><strong>Legal loopholes:</strong> "Essential" cookies are set regardless of your choice - companies define what's "essential".</li>
+                </ul>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #d32f2f; font-size: 1.2em;">How This Data Is Used</h3>
+                <ul style="margin-left: 25px; margin-bottom: 20px;">
+                    <li><strong>Tracking & Profiling:</strong> Companies build detailed profiles about your interests, habits, and demographics to target ads and sell your data.</li>
+                    <li><strong>Price Discrimination:</strong> Some sites show different prices based on your device, location, or browsing history.</li>
+                    <li><strong>Identity Theft:</strong> Combined data points can be used for social engineering or account takeovers.</li>
+                    <li><strong>Persistent Tracking:</strong> Browser fingerprinting lets companies track you even after clearing cookies or using private mode.</li>
+                    <li><strong>Security Vulnerabilities:</strong> Information about your system can help attackers craft targeted exploits.</li>
+                    <li><strong>Cross-site tracking:</strong> Marketing cookies let companies follow you across different websites to build a complete picture of your online behavior.</li>
+                </ul>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px; color: #2e7d32; font-size: 1.2em;">How to Protect Yourself</h3>
+                <ul style="margin-left: 25px; margin-bottom: 15px;">
+                    <li><strong>Never scan QR codes from untrusted sources</strong> (random stickers, suspicious emails, unknown public places).</li>
+                    <li><strong>Preview URLs before opening:</strong> Many camera apps show the URL before opening - check if it looks legitimate.</li>
+                    <li><strong>Always click "Decline All" or "Reject" on cookie banners:</strong> Don't accept cookies unless you trust the site. Read what you're agreeing to.</li>
+                    <li><strong>Deny permission requests:</strong> Location, notifications, camera, microphone - deny unless essential. You can always grant them later if needed.</li>
+                    <li><strong>Use privacy-focused browsers:</strong> Firefox with strict tracking protection, Brave, or Tor Browser.</li>
+                    <li><strong>Install browser extensions:</strong> uBlock Origin (ad/tracker blocker), Privacy Badger, Cookie AutoDelete, WebRTC Leak Shield.</li>
+                    <li><strong>Use a VPN:</strong> Hides your real IP address from websites (but doesn't prevent fingerprinting).</li>
+                    <li><strong>Clear cookies regularly:</strong> Or use private/incognito mode for sensitive browsing (but remember - you can still be tracked).</li>
+                    <li><strong>Disable JavaScript on untrusted sites:</strong> Use extensions like NoScript or uMatrix (but breaks many sites).</li>
+                    <li><strong>Keep software updated:</strong> Browsers and OS updates patch security vulnerabilities.</li>
+                    <li><strong>Review browser settings:</strong> Disable third-party cookies, enable "Do Not Track", limit site data.</li>
+                </ul>
+
+                <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #2196f3;">
+                    <strong style="color: #1976d2;">🔍 Remember:</strong> This demonstration page is educational and doesn't send your data anywhere.
+                    However, real malicious websites <em>would</em> collect and transmit all of this information to their servers.
+                    All the data shown below was collected automatically the moment you loaded this page - no clicks or permissions required for most of it.
+                </div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h2>📱 Device & Browser Information</h2>
+                <div id="device-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>🌍 Location & Network</h2>
+                <div id="location-info"></div>
+
+                <!-- Interactive Map -->
+                <div id="map-container" class="map-container">
+                    <div id="location-map"></div>
+                </div>
+
+                <!-- Location Details Box -->
+                <div id="location-details" class="location-info-box">
+                    <h3>📍 Your Exact Location Has Been Captured</h3>
+                    <p><strong>Address:</strong> <span id="map-address" style="color: #d32f2f; font-weight: 600;">Loading...</span></p>
+                    <p><strong>Latitude:</strong> <span id="map-lat">-</span></p>
+                    <p><strong>Longitude:</strong> <span id="map-lon">-</span></p>
+                    <p><strong>Accuracy:</strong> <span id="map-accuracy">-</span></p>
+                    <p><strong>Altitude:</strong> <span id="map-altitude">-</span></p>
+                    <p><strong>Speed:</strong> <span id="map-speed">-</span></p>
+                    <div class="map-warning">
+                        ⚠️ A malicious website could use this to track your movements, find your home address, or stalk you!
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h2>🖥️ Display & Hardware</h2>
+                <div id="hardware-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>🔒 Privacy & Settings</h2>
+                <div id="privacy-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>🎨 Advanced Fingerprinting</h2>
+                <div id="fingerprint-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>🌐 Network & IP Information</h2>
+                <div id="network-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>📊 Additional Browser Features</h2>
+                <div id="features-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>🎮 Sensors & Permissions</h2>
+                <div id="sensors-info"></div>
+            </div>
+
+            <div class="info-card">
+                <h2>💾 Storage & Quotas</h2>
+                <div id="storage-info"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cookie consent functions
+        let cookiesAccepted = false;
+        let map = null;
+        let marker = null;
+
+        function acceptCookies() {
+            const functional = document.getElementById('cookie-functional').checked;
+            const analytics = document.getElementById('cookie-analytics').checked;
+            const marketing = document.getElementById('cookie-marketing').checked;
+
+            cookiesAccepted = true;
+
+            // Store preferences and set tracking cookies
+            try {
+                localStorage.setItem('cookie-consent', JSON.stringify({
+                    essential: true,
+                    functional: functional,
+                    analytics: analytics,
+                    marketing: marketing,
+                    timestamp: new Date().toISOString()
+                }));
+
+                // Set various tracking cookies (demonstrative)
+                const userId = 'user_' + Math.random().toString(36).substr(2, 9);
+                const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
+
+                document.cookie = `user_id=${userId}; max-age=31536000; path=/`; // 1 year
+                document.cookie = `session_id=${sessionId}; path=/`;
+                document.cookie = `_ga=${Math.random().toString(36).substr(2)}; max-age=63072000; path=/`; // Google Analytics style
+                document.cookie = `_fbp=${Math.random().toString(36).substr(2)}; max-age=7776000; path=/`; // Facebook Pixel style
+
+                if (analytics) {
+                    document.cookie = `analytics_tracking=enabled; max-age=31536000; path=/`;
+                }
+
+                if (marketing) {
+                    document.cookie = `marketing_id=${Math.random().toString(36).substr(2)}; max-age=31536000; path=/`;
+                    document.cookie = `ad_targeting=enabled; max-age=31536000; path=/`;
+                }
+
+                // Store tracking IDs
+                localStorage.setItem('user_tracking_id', userId);
+                localStorage.setItem('session_id', sessionId);
+                localStorage.setItem('first_visit', new Date().toISOString());
+
+            } catch (e) {}
+
+            // Hide modal
+            document.getElementById('cookie-overlay').classList.add('hidden');
+
+            // Show tracking indicator
+            if (functional || analytics || marketing) {
+                document.getElementById('tracking-indicator').classList.add('active');
+            }
+
+            // Request additional permissions if functional cookies are accepted
+            if (functional) {
+                setTimeout(() => {
+                    requestAdditionalPermissions();
+                }, 500);
+            }
+
+            // Start enhanced tracking if analytics enabled
+            if (analytics) {
+                startAnalyticsTracking();
+            }
+
+            // Add tracking indicators
+            addTrackingNotifications(functional, analytics, marketing);
+        }
+
+        function declineCookies() {
+            cookiesAccepted = false;
+
+            try {
+                localStorage.setItem('cookie-consent', JSON.stringify({
+                    essential: true,
+                    functional: false,
+                    analytics: false,
+                    marketing: false,
+                    timestamp: new Date().toISOString()
+                }));
+            } catch (e) {}
+
+            document.getElementById('cookie-overlay').classList.add('hidden');
+
+            // Show what's still being collected
+            addInfo('privacy-info', 'Cookie Consent', 'Declined - but essential data still collected');
+        }
+
+        function displayLocationOnMap(position, enableTracking = false) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+
+            // Show map container
+            document.getElementById('map-container').classList.add('visible');
+            document.getElementById('location-details').classList.add('visible');
+
+            // Enable continuous tracking
+            if (enableTracking && navigator.geolocation) {
+                navigator.geolocation.watchPosition(
+                    (newPosition) => {
+                        const newLat = newPosition.coords.latitude;
+                        const newLon = newPosition.coords.longitude;
+
+                        // Update marker position
+                        if (marker) {
+                            marker.setLatLng([newLat, newLon]);
+                            marker.bindPopup(`<strong>📍 YOU ARE HERE (TRACKING)</strong><br>Lat: ${newLat.toFixed(6)}<br>Lon: ${newLon.toFixed(6)}`).openPopup();
+                        }
+
+                        // Update details
+                        document.getElementById('map-lat').textContent = newLat.toFixed(6);
+                        document.getElementById('map-lon').textContent = newLon.toFixed(6);
+                        document.getElementById('map-accuracy').textContent = `±${newPosition.coords.accuracy.toFixed(0)} meters`;
+
+                        // Show tracking indicator
+                        const warningDiv = document.querySelector('.map-warning');
+                        if (warningDiv) {
+                            warningDiv.innerHTML = '🔴 CONTINUOUSLY TRACKING YOUR LOCATION - We know where you are at all times!';
+                        }
+                    },
+                    null,
+                    { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
+                );
+            }
+
+            // Initialize map if not already done
+            if (!map) {
+                map = L.map('location-map').setView([lat, lon], 15);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                // Add a red pulsing marker
+                const pulsingIcon = L.divIcon({
+                    className: 'pulsing-marker',
+                    html: '<div style="background: #d32f2f; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 rgba(211, 47, 47, 0.4); animation: pulse-marker 2s infinite;"></div>',
+                    iconSize: [20, 20]
+                });
+
+                marker = L.marker([lat, lon], { icon: pulsingIcon }).addTo(map);
+                marker.bindPopup(`<strong>📍 YOU ARE HERE</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}`).openPopup();
+
+                // Add accuracy circle
+                L.circle([lat, lon], {
+                    color: '#d32f2f',
+                    fillColor: '#f03',
+                    fillOpacity: 0.2,
+                    radius: accuracy
+                }).addTo(map);
+
+                // Add CSS for pulsing animation
+                if (!document.getElementById('pulse-animation')) {
+                    const style = document.createElement('style');
+                    style.id = 'pulse-animation';
+                    style.innerHTML = `
+                        @keyframes pulse-marker {
+                            0% {
+                                box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7);
+                            }
+                            70% {
+                                box-shadow: 0 0 0 20px rgba(211, 47, 47, 0);
+                            }
+                            100% {
+                                box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+                            }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+            } else {
+                // Update existing marker
+                marker.setLatLng([lat, lon]);
+                map.setView([lat, lon], 15);
+            }
+
+            // Update location details
+            document.getElementById('map-lat').textContent = lat.toFixed(6);
+            document.getElementById('map-lon').textContent = lon.toFixed(6);
+            document.getElementById('map-accuracy').textContent = `±${accuracy.toFixed(0)} meters`;
+            document.getElementById('map-altitude').textContent = position.coords.altitude ?
+                `${position.coords.altitude.toFixed(0)} meters` : 'Not available';
+            document.getElementById('map-speed').textContent = position.coords.speed ?
+                `${position.coords.speed.toFixed(2)} m/s` : 'Not available';
+
+            // Reverse geocode to get address
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('map-address').innerHTML = `<strong style="color: #d32f2f;">${data.display_name}</strong>`;
+
+                        // Add a prominent warning about the specific address
+                        const addressWarning = document.createElement('div');
+                        addressWarning.style.cssText = 'background: #ffcdd2; padding: 12px; border-radius: 6px; margin-top: 12px; border: 2px solid #d32f2f;';
+                        addressWarning.innerHTML = `
+                            <strong style="color: #b71c1c; font-size: 1.1em;">🚨 YOUR PHYSICAL ADDRESS IS EXPOSED!</strong><br>
+                            <span style="font-size: 0.9em;">A malicious website could now:</span>
+                            <ul style="margin: 8px 0 0 20px; font-size: 0.85em;">
+                                <li>Know where you live or work</li>
+                                <li>Track your daily movements</li>
+                                <li>Target you for robbery</li>
+                                <li>Stalk or harass you</li>
+                                <li>Sell your location history</li>
+                            </ul>
+                        `;
+                        const detailsBox = document.getElementById('location-details');
+                        detailsBox.appendChild(addressWarning);
+                    } else {
+                        document.getElementById('map-address').textContent = 'Address lookup failed';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('map-address').textContent = 'Unable to determine address';
+                });
+
+            // Add to info section
+            addInfo('location-info', '⚠️ Precise Location (from consent)',
+                `Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}<br>` +
+                `Accuracy: ${accuracy}m<br>` +
+                `<strong style="color: #d32f2f;">Your exact location is shown on the map below!</strong>`
+            );
+        }
+
+        function requestAdditionalPermissions() {
+            // Request geolocation with continuous tracking
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        displayLocationOnMap(position, true); // Enable continuous tracking
+                    },
+                    error => {
+                        addInfo('privacy-info', 'Geolocation Request', 'User denied (smart choice!)');
+                    },
+                    { enableHighAccuracy: true }
+                );
+            }
+
+            // Request notification permission
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    addInfo('privacy-info', 'Notification Permission', permission);
+                    if (permission === 'granted') {
+                        // Could send notifications now
+                        addInfo('privacy-info', '⚠️ Notifications Enabled', 'Site can now send you notifications anytime');
+                    }
+                });
+            }
+
+            // Request motion sensors on mobile (iOS requires user gesture)
+            if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission().then(permissionState => {
+                    if (permissionState === 'granted') {
+                        addInfo('sensors-info', '⚠️ Motion Sensors Granted', 'Tracking your movements');
+                        window.addEventListener('devicemotion', (event) => {
+                            // Now tracking motion
+                        });
+                    }
+                }).catch(() => {});
+            }
+        }
+
+        function startAnalyticsTracking() {
+            // Track detailed mouse movements
+            let mouseLog = [];
+            document.addEventListener('mousemove', (e) => {
+                mouseLog.push({x: e.clientX, y: e.clientY, time: Date.now()});
+                if (mouseLog.length > 100) mouseLog.shift(); // Keep last 100
+            });
+
+            // Track all clicks with details
+            document.addEventListener('click', (e) => {
+                const clickData = {
+                    x: e.clientX,
+                    y: e.clientY,
+                    element: e.target.tagName,
+                    time: new Date().toISOString()
+                };
+                console.log('Click tracked:', clickData);
+            });
+
+            // Track scroll depth
+            let maxScroll = 0;
+            window.addEventListener('scroll', () => {
+                const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+                if (scrollPercent > maxScroll) {
+                    maxScroll = scrollPercent;
+                }
+            });
+
+            // Track time on page
+            const startTime = Date.now();
+            setInterval(() => {
+                const timeOnPage = Math.floor((Date.now() - startTime) / 1000);
+                // This would normally be sent to analytics server
+            }, 10000); // Every 10 seconds
+
+            // Track visibility changes (did they switch tabs?)
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    console.log('User left page - tracking this');
+                } else {
+                    console.log('User returned to page - tracking this');
+                }
+            });
+
+            addInfo('privacy-info', '📊 Analytics Tracking',
+                'Recording: mouse movements, clicks, scroll depth, time on page, tab switches, etc.');
+        }
+
+        function addTrackingNotifications(functional, analytics, marketing) {
+            if (functional) {
+                addInfo('privacy-info', '🔴 Functional Tracking', 'ACTIVE - Collecting location, sensors, device data');
+            }
+            if (analytics) {
+                addInfo('privacy-info', '🔴 Analytics Tracking', 'ACTIVE - Recording all interactions, clicks, scrolls, time spent');
+            }
+            if (marketing) {
+                addInfo('privacy-info', '🔴 Marketing Tracking', 'ACTIVE - Building advertising profile, sharing with 3rd parties');
+            }
+
+            // Show what accepting cookies enabled
+            const warningBox = document.createElement('div');
+            warningBox.style.cssText = 'background: #ffebee; border-left: 4px solid #d32f2f; padding: 15px; margin-bottom: 20px; border-radius: 5px;';
+            warningBox.innerHTML = `
+                <strong style="color: #d32f2f;">⚠️ By accepting cookies, you just granted permission to:</strong>
+                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
+                    ${functional ? '<li>Access your precise location</li>' : ''}
+                    ${functional ? '<li>Read device sensors (motion, orientation)</li>' : ''}
+                    ${analytics ? '<li>Track every mouse movement and click</li>' : ''}
+                    ${analytics ? '<li>Record how long you spend on this page</li>' : ''}
+                    ${marketing ? '<li>Build a detailed profile for targeted advertising</li>' : ''}
+                    ${marketing ? '<li>Share your data with third-party advertisers</li>' : ''}
+                    <li><strong>Store this data indefinitely</strong></li>
+                    <li>Set multiple tracking cookies (user ID, session ID, analytics IDs)</li>
+                    <li>Store unique identifiers in localStorage</li>
+                </ul>
+                <p style="margin-top: 15px; padding: 10px; background: #fff; border-radius: 5px; font-size: 0.9em;">
+                    <strong>Cookies set:</strong> ${document.cookie.split(';').length} tracking cookies are now active on your device.
+                    Check the "Storage & Quotas" section below to see them.
+                </p>
+            `;
+
+            const container = document.querySelector('.container');
+            const firstCard = document.querySelector('.info-grid');
+            container.insertBefore(warningBox, firstCard);
+
+            // Update the cookie display to show newly set cookies
+            setTimeout(() => {
+                const cookieInfo = document.cookie ? 'Yes (' + document.cookie.split(';').length + ' cookies) - ' + document.cookie : 'None';
+                const cookieElements = Array.from(document.querySelectorAll('.info-label')).find(el => el.textContent === 'Cookies Accessible');
+                if (cookieElements) {
+                    cookieElements.nextElementSibling.innerHTML = cookieInfo;
+                }
+            }, 100);
+        }
+
+        // Helper function to create info items
+        function addInfo(containerId, label, value) {
+            const container = document.getElementById(containerId);
+            const item = document.createElement('div');
+            item.className = 'info-item';
+            item.innerHTML = `
+                <div class="info-label">${label}</div>
+                <div class="info-value">${value}</div>
+            `;
+            container.appendChild(item);
+        }
+
+        // Device & Browser Information
+        addInfo('device-info', 'User Agent', navigator.userAgent);
+        addInfo('device-info', 'Platform', navigator.platform);
+        addInfo('device-info', 'Vendor', navigator.vendor || 'Not available');
+        addInfo('device-info', 'Language', navigator.language);
+        addInfo('device-info', 'Languages', navigator.languages.join(', '));
+        addInfo('device-info', 'Online Status', navigator.onLine ? 'Online' : 'Offline');
+        addInfo('device-info', 'Cookie Enabled', navigator.cookieEnabled ? 'Yes' : 'No');
+        addInfo('device-info', 'PDF Viewer Enabled', navigator.pdfViewerEnabled ? 'Yes' : 'No');
+
+        // Location & Network
+        addInfo('location-info', 'Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone);
+        addInfo('location-info', 'Time Zone Offset', new Date().getTimezoneOffset() + ' minutes');
+        addInfo('location-info', 'Local Time', new Date().toString());
+        addInfo('location-info', 'Referrer', document.referrer || 'Direct visit');
+
+        // Connection information
+        if (navigator.connection || navigator.mozConnection || navigator.webkitConnection) {
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            addInfo('location-info', 'Connection Type', conn.effectiveType || 'Unknown');
+            addInfo('location-info', 'Downlink Speed', conn.downlink ? conn.downlink + ' Mbps' : 'Unknown');
+            addInfo('location-info', 'RTT', conn.rtt ? conn.rtt + ' ms' : 'Unknown');
+            addInfo('location-info', 'Save Data Mode', conn.saveData ? 'Enabled' : 'Disabled');
+        }
+
+        // Geolocation (requires permission) - will be auto-requested if cookies accepted
+        const geoContainer = document.getElementById('location-info');
+        const geoItem = document.createElement('div');
+        geoItem.className = 'info-item';
+        geoItem.innerHTML = `
+            <div class="info-label">Geolocation</div>
+            <div class="info-value" id="geo-value">
+                <button class="request-permission-btn" onclick="requestGeolocation()">Request Location</button>
+            </div>
+        `;
+        geoContainer.appendChild(geoItem);
+
+        // Show cookie consent status
+        if (cookiesAccepted) {
+            addInfo('privacy-info', 'Cookie Consent Status', '✅ Accepted - Full tracking enabled');
+        } else {
+            addInfo('privacy-info', 'Cookie Consent Status', 'Pending or declined');
+        }
+
+        // Display & Hardware
+        addInfo('hardware-info', 'Screen Resolution', `${screen.width} × ${screen.height}`);
+        addInfo('hardware-info', 'Available Screen', `${screen.availWidth} × ${screen.availHeight}`);
+        addInfo('hardware-info', 'Color Depth', screen.colorDepth + ' bits');
+        addInfo('hardware-info', 'Pixel Ratio', window.devicePixelRatio);
+        addInfo('hardware-info', 'Viewport Size', `${window.innerWidth} × ${window.innerHeight}`);
+        addInfo('hardware-info', 'CPU Cores', navigator.hardwareConcurrency || 'Not available');
+        addInfo('hardware-info', 'Device Memory', navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'Not available');
+        addInfo('hardware-info', 'Max Touch Points', navigator.maxTouchPoints || 0);
+
+        // Privacy & Settings
+        addInfo('privacy-info', 'Do Not Track', navigator.doNotTrack || 'Not set');
+        addInfo('privacy-info', 'Java Enabled', navigator.javaEnabled ? navigator.javaEnabled() : false);
+        addInfo('privacy-info', 'Plugins Count', navigator.plugins ? navigator.plugins.length : 0);
+
+        // List all plugins
+        if (navigator.plugins && navigator.plugins.length > 0) {
+            const pluginNames = Array.from(navigator.plugins).map(p => p.name).join(', ');
+            addInfo('privacy-info', 'Plugins', pluginNames);
+        }
+
+        // Session/Local Storage
+        try {
+            localStorage.setItem('test', 'test');
+            localStorage.removeItem('test');
+            addInfo('privacy-info', 'Local Storage', 'Enabled');
+        } catch (e) {
+            addInfo('privacy-info', 'Local Storage', 'Disabled');
+        }
+
+        try {
+            sessionStorage.setItem('test', 'test');
+            sessionStorage.removeItem('test');
+            addInfo('privacy-info', 'Session Storage', 'Enabled');
+        } catch (e) {
+            addInfo('privacy-info', 'Session Storage', 'Disabled');
+        }
+
+        // IndexedDB
+        addInfo('privacy-info', 'IndexedDB', window.indexedDB ? 'Available' : 'Not available');
+
+        // Advanced Fingerprinting
+        // Canvas Fingerprinting
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('Browser fingerprint', 2, 2);
+            const canvasData = canvas.toDataURL();
+            const canvasHash = canvasData.slice(-50);
+            addInfo('fingerprint-info', 'Canvas Fingerprint', canvasHash);
+        } catch (e) {
+            addInfo('fingerprint-info', 'Canvas Fingerprint', 'Error: ' + e.message);
+        }
+
+        // WebGL Information
+        try {
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (gl) {
+                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debugInfo) {
+                    addInfo('fingerprint-info', 'WebGL Vendor', gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL));
+                    addInfo('fingerprint-info', 'WebGL Renderer', gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL));
+                }
+                addInfo('fingerprint-info', 'WebGL Version', gl.getParameter(gl.VERSION));
+            }
+        } catch (e) {
+            addInfo('fingerprint-info', 'WebGL', 'Not available');
+        }
+
+        // Audio Context Fingerprinting
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const analyser = audioContext.createAnalyser();
+            const gainNode = audioContext.createGain();
+            const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+
+            gainNode.gain.value = 0;
+            oscillator.connect(analyser);
+            analyser.connect(scriptProcessor);
+            scriptProcessor.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.start(0);
+
+            addInfo('fingerprint-info', 'Audio Context', 'Sample Rate: ' + audioContext.sampleRate + ' Hz');
+
+            oscillator.stop();
+            audioContext.close();
+        } catch (e) {
+            addInfo('fingerprint-info', 'Audio Context', 'Not available');
+        }
+
+        // Fonts detection (simplified)
+        addInfo('fingerprint-info', 'Font Rendering', 'Unique per system/browser');
+
+        // Battery API
+        if (navigator.getBattery) {
+            navigator.getBattery().then(battery => {
+                addInfo('fingerprint-info', 'Battery Level', Math.round(battery.level * 100) + '%');
+                addInfo('fingerprint-info', 'Battery Charging', battery.charging ? 'Yes' : 'No');
+            });
+        } else {
+            addInfo('fingerprint-info', 'Battery Info', 'Not available');
+        }
+
+        // Media Devices
+        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+            navigator.mediaDevices.enumerateDevices().then(devices => {
+                const audioInputs = devices.filter(d => d.kind === 'audioinput').length;
+                const audioOutputs = devices.filter(d => d.kind === 'audiooutput').length;
+                const videoInputs = devices.filter(d => d.kind === 'videoinput').length;
+                addInfo('fingerprint-info', 'Media Devices', `${audioInputs} mic(s), ${videoInputs} camera(s), ${audioOutputs} speaker(s)`);
+            });
+        }
+
+        // Function to request geolocation
+        window.requestGeolocation = function() {
+            const geoValue = document.getElementById('geo-value');
+            geoValue.innerHTML = '<span class="loading">Requesting permission...</span>';
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        geoValue.innerHTML = `<strong style="color: #d32f2f;">✓ Location Granted</strong><br>See map below`;
+                        displayLocationOnMap(position);
+                    },
+                    error => {
+                        geoValue.innerHTML = '<span class="permission-needed">Permission denied or unavailable</span>';
+                    },
+                    { enableHighAccuracy: true }
+                );
+            } else {
+                geoValue.innerHTML = '<span class="permission-needed">Geolocation not supported</span>';
+            }
+        };
+
+        // Detect installed apps via protocol handlers (limited)
+        addInfo('fingerprint-info', 'Protocol Handlers', 'Can detect some installed apps');
+
+        // Performance timing
+        if (window.performance && window.performance.timing) {
+            const loadTime = window.performance.timing.loadEventEnd - window.performance.timing.navigationStart;
+            addInfo('fingerprint-info', 'Page Load Time', loadTime + ' ms');
+        }
+
+        // ===== NETWORK & IP INFORMATION =====
+
+        // WebRTC IP Leak Detection
+        function detectWebRTCIPs() {
+            const ips = [];
+            const RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+
+            if (!RTCPeerConnection) {
+                addInfo('network-info', 'WebRTC IPs', 'Not supported');
+                return;
+            }
+
+            const pc = new RTCPeerConnection({
+                iceServers: [{urls: 'stun:stun.l.google.com:19302'}]
+            });
+
+            pc.createDataChannel('');
+            pc.createOffer().then(offer => pc.setLocalDescription(offer));
+
+            pc.onicecandidate = (ice) => {
+                if (!ice || !ice.candidate || !ice.candidate.candidate) return;
+
+                const candidate = ice.candidate.candidate;
+                const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/;
+                const ipMatch = ipRegex.exec(candidate);
+
+                if (ipMatch && !ips.includes(ipMatch[1])) {
+                    ips.push(ipMatch[1]);
+                    document.getElementById('webrtc-ips').innerHTML = ips.join('<br>');
+                }
+            };
+
+            setTimeout(() => {
+                pc.close();
+                if (ips.length === 0) {
+                    document.getElementById('webrtc-ips').innerHTML = '<span class="loading">No IPs detected (may be blocked)</span>';
+                }
+            }, 3000);
+        }
+
+        const networkItem = document.createElement('div');
+        networkItem.className = 'info-item';
+        networkItem.innerHTML = `
+            <div class="info-label">WebRTC Local IPs</div>
+            <div class="info-value" id="webrtc-ips"><span class="loading">Detecting...</span></div>
+        `;
+        document.getElementById('network-info').appendChild(networkItem);
+        detectWebRTCIPs();
+
+        // Fetch public IP using external service
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                addInfo('network-info', 'Public IPv4', data.ip);
+            })
+            .catch(() => {
+                addInfo('network-info', 'Public IP', 'Unable to fetch');
+            });
+
+        // Try IPv6
+        fetch('https://api64.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                addInfo('network-info', 'Public IPv6', data.ip);
+            })
+            .catch(() => {
+                addInfo('network-info', 'Public IPv6', 'Not available');
+            });
+
+        // Get IP info with geolocation
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                addInfo('network-info', 'ISP', data.org || 'Unknown');
+                addInfo('network-info', 'City (from IP)', data.city || 'Unknown');
+                addInfo('network-info', 'Region', data.region || 'Unknown');
+                addInfo('network-info', 'Country', data.country_name || 'Unknown');
+                addInfo('network-info', 'Postal Code', data.postal || 'Unknown');
+                addInfo('network-info', 'ASN', data.asn || 'Unknown');
+            })
+            .catch(() => {
+                addInfo('network-info', 'IP Geolocation', 'Unable to fetch');
+            });
+
+        // ===== ADDITIONAL BROWSER FEATURES =====
+
+        // WebAssembly support
+        addInfo('features-info', 'WebAssembly', typeof WebAssembly !== 'undefined' ? 'Supported' : 'Not supported');
+
+        // Service Worker support
+        addInfo('features-info', 'Service Workers', 'serviceWorker' in navigator ? 'Supported' : 'Not supported');
+
+        // Web Workers
+        addInfo('features-info', 'Web Workers', typeof Worker !== 'undefined' ? 'Supported' : 'Not supported');
+
+        // WebSocket
+        addInfo('features-info', 'WebSocket', typeof WebSocket !== 'undefined' ? 'Supported' : 'Not supported');
+
+        // WebRTC
+        addInfo('features-info', 'WebRTC', !!(window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection) ? 'Supported' : 'Not supported');
+
+        // Notification API
+        addInfo('features-info', 'Notifications', 'Notification' in window ? 'Supported - Status: ' + Notification.permission : 'Not supported');
+
+        // Payment Request API
+        addInfo('features-info', 'Payment Request', 'PaymentRequest' in window ? 'Supported' : 'Not supported');
+
+        // Web Bluetooth
+        addInfo('features-info', 'Web Bluetooth', 'bluetooth' in navigator ? 'Supported' : 'Not supported');
+
+        // Web USB
+        addInfo('features-info', 'Web USB', 'usb' in navigator ? 'Supported' : 'Not supported');
+
+        // Web MIDI
+        addInfo('features-info', 'Web MIDI', 'requestMIDIAccess' in navigator ? 'Supported' : 'Not supported');
+
+        // Gamepad API
+        addInfo('features-info', 'Gamepad API', 'getGamepads' in navigator ? 'Supported' : 'Not supported');
+
+        // Clipboard API
+        addInfo('features-info', 'Clipboard API', 'clipboard' in navigator ? 'Supported' : 'Not supported');
+
+        // Share API
+        addInfo('features-info', 'Web Share', 'share' in navigator ? 'Supported' : 'Not supported');
+
+        // Vibration API
+        addInfo('features-info', 'Vibration', 'vibrate' in navigator ? 'Supported' : 'Not supported');
+
+        // Wake Lock API
+        addInfo('features-info', 'Wake Lock', 'wakeLock' in navigator ? 'Supported' : 'Not supported');
+
+        // Speech Recognition
+        addInfo('features-info', 'Speech Recognition', 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window ? 'Supported' : 'Not supported');
+
+        // Speech Synthesis
+        addInfo('features-info', 'Speech Synthesis', 'speechSynthesis' in window ? 'Supported' : 'Not supported');
+
+        // Pointer Lock API
+        addInfo('features-info', 'Pointer Lock', 'pointerLockElement' in document ? 'Supported' : 'Not supported');
+
+        // Fullscreen API
+        addInfo('features-info', 'Fullscreen', document.fullscreenEnabled ? 'Supported' : 'Not supported');
+
+        // Screen Orientation
+        if (screen.orientation) {
+            addInfo('features-info', 'Screen Orientation', screen.orientation.type + ' (' + screen.orientation.angle + '°)');
+        }
+
+        // Keyboard layout detection
+        if (navigator.keyboard) {
+            navigator.keyboard.getLayoutMap().then(map => {
+                addInfo('features-info', 'Keyboard Layout', 'Detected (' + map.size + ' keys mapped)');
+            }).catch(() => {
+                addInfo('features-info', 'Keyboard Layout', 'Unable to detect');
+            });
+        } else {
+            addInfo('features-info', 'Keyboard Layout', 'API not supported');
+        }
+
+        // Installed fonts detection (more thorough)
+        const baseFonts = ['monospace', 'sans-serif', 'serif'];
+        const testFonts = [
+            'Arial', 'Verdana', 'Times New Roman', 'Courier New', 'Georgia', 'Palatino',
+            'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console',
+            'Tahoma', 'Lucida Sans Unicode', 'Arial Black', 'Helvetica', 'Monaco', 'Consolas'
+        ];
+
+        const detectedFonts = [];
+        const testString = 'mmmmmmmmmmlli';
+        const testSize = '72px';
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        function getTextWidth(font) {
+            context.font = testSize + ' ' + font;
+            return context.measureText(testString).width;
+        }
+
+        const baseWidths = {};
+        baseFonts.forEach(baseFont => {
+            baseWidths[baseFont] = getTextWidth(baseFont);
+        });
+
+        testFonts.forEach(testFont => {
+            let detected = false;
+            baseFonts.forEach(baseFont => {
+                const width = getTextWidth(`'${testFont}', ${baseFont}`);
+                if (width !== baseWidths[baseFont]) {
+                    detected = true;
+                }
+            });
+            if (detected) {
+                detectedFonts.push(testFont);
+            }
+        });
+
+        addInfo('features-info', 'Detected Fonts', detectedFonts.length + ' common fonts: ' + detectedFonts.join(', '));
+
+        // ===== SENSORS & PERMISSIONS =====
+
+        // Check for motion sensors
+        if (window.DeviceMotionEvent) {
+            const motionItem = document.createElement('div');
+            motionItem.className = 'info-item';
+            motionItem.innerHTML = `
+                <div class="info-label">Motion Sensors</div>
+                <div class="info-value" id="motion-value">
+                    <button class="request-permission-btn" onclick="requestMotion()">Request Motion Access</button>
+                </div>
+            `;
+            document.getElementById('sensors-info').appendChild(motionItem);
+        } else {
+            addInfo('sensors-info', 'Motion Sensors', 'Not supported');
+        }
+
+        // Check for orientation sensors
+        if (window.DeviceOrientationEvent) {
+            const orientationItem = document.createElement('div');
+            orientationItem.className = 'info-item';
+            orientationItem.innerHTML = `
+                <div class="info-label">Orientation Sensors</div>
+                <div class="info-value" id="orientation-value">
+                    <button class="request-permission-btn" onclick="requestOrientation()">Request Orientation Access</button>
+                </div>
+            `;
+            document.getElementById('sensors-info').appendChild(orientationItem);
+        } else {
+            addInfo('sensors-info', 'Orientation Sensors', 'Not supported');
+        }
+
+        // Ambient Light Sensor
+        if ('AmbientLightSensor' in window) {
+            addInfo('sensors-info', 'Light Sensor', 'Supported');
+        } else {
+            addInfo('sensors-info', 'Light Sensor', 'Not supported');
+        }
+
+        // Proximity Sensor
+        if ('ProximitySensor' in window) {
+            addInfo('sensors-info', 'Proximity Sensor', 'Supported');
+        } else {
+            addInfo('sensors-info', 'Proximity Sensor', 'Not supported');
+        }
+
+        // Check all permissions
+        if (navigator.permissions) {
+            const permissionsToCheck = [
+                'camera', 'microphone', 'geolocation', 'notifications',
+                'persistent-storage', 'push', 'midi', 'background-sync'
+            ];
+
+            permissionsToCheck.forEach(permission => {
+                navigator.permissions.query({name: permission}).then(result => {
+                    addInfo('sensors-info', permission.charAt(0).toUpperCase() + permission.slice(1) + ' Permission', result.state);
+                }).catch(() => {
+                    // Permission not supported
+                });
+            });
+        }
+
+        // ===== STORAGE & QUOTAS =====
+
+        // Storage Estimate
+        if (navigator.storage && navigator.storage.estimate) {
+            navigator.storage.estimate().then(estimate => {
+                const usage = (estimate.usage / 1024 / 1024).toFixed(2);
+                const quota = (estimate.quota / 1024 / 1024).toFixed(2);
+                const percentage = ((estimate.usage / estimate.quota) * 100).toFixed(2);
+                addInfo('storage-info', 'Storage Used', `${usage} MB of ${quota} MB (${percentage}%)`);
+            });
+        } else {
+            addInfo('storage-info', 'Storage Quota', 'API not supported');
+        }
+
+        // Check if storage is persisted
+        if (navigator.storage && navigator.storage.persisted) {
+            navigator.storage.persisted().then(isPersisted => {
+                addInfo('storage-info', 'Persistent Storage', isPersisted ? 'Yes' : 'No');
+            });
+        }
+
+        // Cookies
+        const cookieCount = document.cookie ? document.cookie.split(';').length : 0;
+        const cookieDisplay = document.cookie ?
+            `Yes (${cookieCount} cookies)<br><small style="font-size: 0.85em; opacity: 0.8;">${document.cookie}</small>` :
+            'None or inaccessible';
+        addInfo('storage-info', 'Cookies Accessible', cookieDisplay);
+
+        // Check localStorage for tracking data
+        try {
+            const trackingData = [];
+            if (localStorage.getItem('user_tracking_id')) {
+                trackingData.push(`User ID: ${localStorage.getItem('user_tracking_id')}`);
+            }
+            if (localStorage.getItem('session_id')) {
+                trackingData.push(`Session: ${localStorage.getItem('session_id')}`);
+            }
+            if (localStorage.getItem('cookie-consent')) {
+                trackingData.push('Cookie consent record');
+            }
+            if (trackingData.length > 0) {
+                addInfo('storage-info', '⚠️ Tracking IDs Stored', trackingData.join('<br>'));
+            }
+        } catch (e) {}
+
+        // Cache API
+        addInfo('storage-info', 'Cache API', 'caches' in window ? 'Supported' : 'Not supported');
+
+        // Check cache storage
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                addInfo('storage-info', 'Cache Storage', names.length + ' cache(s): ' + (names.length > 0 ? names.join(', ') : 'None'));
+            });
+        }
+
+        // WebSQL (deprecated but still detectable)
+        addInfo('storage-info', 'WebSQL', 'openDatabase' in window ? 'Supported (deprecated)' : 'Not supported');
+
+        // File System API
+        addInfo('storage-info', 'File System Access', 'showOpenFilePicker' in window ? 'Supported' : 'Not supported');
+
+        // ===== ADDITIONAL ADVANCED TRACKING =====
+
+        // Mouse tracking snippet
+        let mouseMovements = 0;
+        document.addEventListener('mousemove', () => {
+            mouseMovements++;
+        });
+
+        setTimeout(() => {
+            addInfo('fingerprint-info', 'Mouse Activity (5s)', mouseMovements + ' movements');
+        }, 5000);
+
+        // Keyboard detection
+        let keyPresses = 0;
+        document.addEventListener('keydown', () => {
+            keyPresses++;
+        });
+
+        setTimeout(() => {
+            addInfo('fingerprint-info', 'Keyboard Activity (5s)', keyPresses + ' key presses');
+        }, 5000);
+
+        // Scroll behavior
+        let scrollEvents = 0;
+        window.addEventListener('scroll', () => {
+            scrollEvents++;
+        });
+
+        // Detect ad blockers
+        function detectAdBlocker() {
+            const adTest = document.createElement('div');
+            adTest.innerHTML = '&nbsp;';
+            adTest.className = 'adsbox ad-banner ad-unit';
+            adTest.style.width = '1px';
+            adTest.style.height = '1px';
+            document.body.appendChild(adTest);
+
+            setTimeout(() => {
+                const isBlocked = adTest.offsetHeight === 0;
+                addInfo('fingerprint-info', 'Ad Blocker', isBlocked ? 'Likely detected' : 'Not detected');
+                document.body.removeChild(adTest);
+            }, 100);
+        }
+        detectAdBlocker();
+
+        // Browser automation detection
+        const automationSignals = [];
+        if (navigator.webdriver) automationSignals.push('webdriver flag');
+        if (window.callPhantom || window._phantom) automationSignals.push('PhantomJS');
+        if (window.__nightmare) automationSignals.push('Nightmare');
+        if (window.Buffer) automationSignals.push('Node.js Buffer');
+        if (window.emit) automationSignals.push('CouchDB');
+        if (window.spawn) automationSignals.push('Rhino');
+
+        addInfo('fingerprint-info', 'Automation Detection', automationSignals.length > 0 ? 'Detected: ' + automationSignals.join(', ') : 'Not detected');
+
+        // Chrome-specific features
+        if (window.chrome) {
+            addInfo('fingerprint-info', 'Chrome Object', 'Detected');
+            if (window.chrome.runtime) {
+                addInfo('fingerprint-info', 'Chrome Extensions', 'Runtime detected (extensions likely installed)');
+            }
+        }
+
+        // Functions for sensor access
+        window.requestMotion = function() {
+            const motionValue = document.getElementById('motion-value');
+
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission().then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('devicemotion', handleMotion);
+                        motionValue.innerHTML = '<span class="loading">Listening for motion...</span>';
+                    } else {
+                        motionValue.innerHTML = '<span class="permission-needed">Permission denied</span>';
+                    }
+                }).catch(() => {
+                    motionValue.innerHTML = '<span class="permission-needed">Error requesting permission</span>';
+                });
+            } else {
+                // Permission not needed
+                window.addEventListener('devicemotion', handleMotion);
+                motionValue.innerHTML = '<span class="loading">Listening for motion...</span>';
+            }
+        };
+
+        function handleMotion(event) {
+            const x = event.accelerationIncludingGravity.x?.toFixed(2) || 0;
+            const y = event.accelerationIncludingGravity.y?.toFixed(2) || 0;
+            const z = event.accelerationIncludingGravity.z?.toFixed(2) || 0;
+            document.getElementById('motion-value').innerHTML = `X: ${x}, Y: ${y}, Z: ${z} m/s²`;
+        }
+
+        window.requestOrientation = function() {
+            const orientationValue = document.getElementById('orientation-value');
+
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission().then(permissionState => {
+                    if (permissionState === 'granted') {
+                        window.addEventListener('deviceorientation', handleOrientation);
+                        orientationValue.innerHTML = '<span class="loading">Listening for orientation...</span>';
+                    } else {
+                        orientationValue.innerHTML = '<span class="permission-needed">Permission denied</span>';
+                    }
+                }).catch(() => {
+                    orientationValue.innerHTML = '<span class="permission-needed">Error requesting permission</span>';
+                });
+            } else {
+                window.addEventListener('deviceorientation', handleOrientation);
+                orientationValue.innerHTML = '<span class="loading">Listening for orientation...</span>';
+            }
+        };
+
+        function handleOrientation(event) {
+            const alpha = event.alpha?.toFixed(1) || 0;
+            const beta = event.beta?.toFixed(1) || 0;
+            const gamma = event.gamma?.toFixed(1) || 0;
+            document.getElementById('orientation-value').innerHTML = `α: ${alpha}°, β: ${beta}°, γ: ${gamma}°`;
+        }
+
+        // Get voice synthesis voices (can indicate language packs installed)
+        if ('speechSynthesis' in window) {
+            let voices = speechSynthesis.getVoices();
+            if (voices.length === 0) {
+                speechSynthesis.onvoiceschanged = () => {
+                    voices = speechSynthesis.getVoices();
+                    addInfo('features-info', 'Speech Voices', voices.length + ' voices available');
+                };
+            } else {
+                addInfo('features-info', 'Speech Voices', voices.length + ' voices available');
+            }
+        }
+
+        // Check for Gamepads
+        if (navigator.getGamepads) {
+            const checkGamepads = () => {
+                const gamepads = navigator.getGamepads();
+                const connected = Array.from(gamepads).filter(gp => gp !== null);
+                if (connected.length > 0) {
+                    addInfo('sensors-info', 'Gamepads Connected', connected.length + ': ' + connected.map(g => g.id).join(', '));
+                }
+            };
+
+            window.addEventListener('gamepadconnected', checkGamepads);
+            checkGamepads();
+        }
+
+        // Detect incognito/private mode (heuristic)
+        async function detectIncognito() {
+            // Test for various browser-specific private mode indicators
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                const {usage, quota} = await navigator.storage.estimate();
+                // In incognito, quota is often much smaller
+                if (quota < 120000000) {
+                    addInfo('privacy-info', 'Private Mode', 'Likely (low quota)');
+                    return;
+                }
+            }
+
+            // Test IndexedDB behavior
+            try {
+                const db = indexedDB.open('test');
+                db.onerror = () => {
+                    addInfo('privacy-info', 'Private Mode', 'Possibly (IndexedDB blocked)');
+                };
+            } catch (e) {
+                addInfo('privacy-info', 'Private Mode', 'Possibly (IndexedDB error)');
+                return;
+            }
+
+            addInfo('privacy-info', 'Private Mode', 'Unlikely (normal mode)');
+        }
+        detectIncognito();
+
+        // Performance memory info (Chrome)
+        if (performance.memory) {
+            const usedMB = (performance.memory.usedJSHeapSize / 1048576).toFixed(2);
+            const totalMB = (performance.memory.totalJSHeapSize / 1048576).toFixed(2);
+            const limitMB = (performance.memory.jsHeapSizeLimit / 1048576).toFixed(2);
+            addInfo('fingerprint-info', 'JS Heap Memory', `${usedMB} MB used / ${totalMB} MB total (limit: ${limitMB} MB)`);
+        }
+    </script>
+</body>
+</html>
