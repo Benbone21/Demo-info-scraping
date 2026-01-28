@@ -83,65 +83,6 @@
             }
         }
 
-        /* Featured card - spans multiple columns */
-        .info-card.featured {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-        }
-
-        .info-card.featured h2 {
-            color: white;
-            border-bottom-color: rgba(255,255,255,0.3);
-            font-size: 1.6em;
-        }
-
-        .info-card.featured .info-label {
-            color: rgba(255,255,255,0.95);
-            font-size: 1.05em;
-            font-weight: 700;
-        }
-
-        .info-card.featured .info-value {
-            background: rgba(255,255,255,0.95);
-            color: #333;
-            font-size: 1em;
-            padding: 12px 14px;
-            font-weight: 500;
-        }
-
-        .info-card.featured .info-item {
-            padding: 12px 0;
-            border-bottom-color: rgba(255,255,255,0.2);
-        }
-
-        @media (min-width: 768px) {
-            .info-card.featured {
-                grid-column: span 2;
-            }
-
-            .info-card.featured .info-item {
-                grid-template-columns: 250px 1fr;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .info-card.featured {
-                grid-column: span 3;
-            }
-
-            .info-card.featured #critical-info {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0 30px;
-            }
-
-            .info-card.featured .info-item {
-                grid-template-columns: 200px 1fr;
-            }
-        }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -495,24 +436,6 @@
             <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">(This is a demonstration - no data is being sent anywhere)</p>
         </div>
 
-        <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 15px; background: #ffebee; border-left: 4px solid #d32f2f;">
-            <h2 style="color: #c62828;">⚠️ What Just Happened</h2>
-            <div style="color: #333; line-height: 1.5; font-size: 1em;">
-                <p style="margin-bottom: 10px;">
-                    <strong>1. Fake Login Page:</strong> You just entered credentials on what looked like a legitimate login form. A malicious site would now have your username and password.
-                </p>
-                <p style="margin-bottom: 10px;">
-                    <strong>2. Deceptive Cookie Consent:</strong> Both buttons ("Manage Settings" and "Accept & Continue") accepted ALL cookies. This is a dark pattern - giving users fake choices.
-                </p>
-                <p style="margin-bottom: 10px;">
-                    <strong>3. Automatic Data Collection:</strong> Even before you clicked anything, this page collected your IP, browser fingerprint, device info, and more.
-                </p>
-                <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; margin-top: 10px; border-left: 3px solid #2196f3; font-size: 0.95em;">
-                    <strong>Educational Demo:</strong> This is a demonstration - no data leaves your browser. Real phishing sites would send everything to attackers' servers instantly.
-                </div>
-            </div>
-        </div>
-
         <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 15px; background: #fff3cd; border-left: 4px solid #ffc107;">
             <h2 style="color: #856404;">Security Risks</h2>
             <div style="color: #333; line-height: 1.5; font-size: 1em;">
@@ -528,10 +451,9 @@
         </div>
 
         <div class="info-grid">
-            <!-- Featured Card - Most Critical Info -->
-            <div class="info-card featured">
-                <h2>🚨 CRITICAL DATA HARVESTED</h2>
-                <div id="critical-info"></div>
+            <div class="info-card">
+                <h2>🌐 Network & IP Information</h2>
+                <div id="network-info"></div>
             </div>
 
             <div class="info-card">
@@ -578,25 +500,6 @@
                 <div id="fingerprint-info"></div>
             </div>
 
-            <div class="info-card">
-                <h2>🌐 Network & IP Information</h2>
-                <div id="network-info"></div>
-            </div>
-
-            <div class="info-card">
-                <h2>📊 Additional Browser Features</h2>
-                <div id="features-info"></div>
-            </div>
-
-            <div class="info-card">
-                <h2>🎮 Sensors & Permissions</h2>
-                <div id="sensors-info"></div>
-            </div>
-
-            <div class="info-card">
-                <h2>💾 Storage & Quotas</h2>
-                <div id="storage-info"></div>
-            </div>
         </div>
     </div>
 
@@ -605,23 +508,6 @@
         let cookiesAccepted = false;
         let map = null;
         let marker = null;
-        let loginCredentials = null;
-
-        // Load harvested credentials from localStorage (from login page)
-        try {
-            const storedCreds = localStorage.getItem('harvested-credentials');
-            if (storedCreds) {
-                loginCredentials = JSON.parse(storedCreds);
-            }
-        } catch (e) {}
-
-        // Initialize critical info on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            populateCriticalInfo();
-            if (loginCredentials) {
-                displayHarvestedCredentials();
-            }
-        });
 
         function acceptCookies() {
             // BOTH BUTTONS ACCEPT COOKIES - Dark Pattern Example!
@@ -678,45 +564,6 @@
 
             // Add tracking indicators
             addTrackingNotifications(functional, analytics, marketing);
-
-            // Update critical info if it exists
-            if (document.getElementById('critical-info')) {
-                // Update cookie status in critical info
-                const criticalItems = document.querySelectorAll('#critical-info .info-item');
-                criticalItems.forEach(item => {
-                    const label = item.querySelector('.info-label');
-                    if (label && label.textContent.includes('Cookie Tracking')) {
-                        const value = item.querySelector('.info-value');
-                        value.innerHTML = '<span style="color: #ff4757; font-weight: 600;">ACTIVE - All cookies accepted</span>';
-                    }
-                });
-            }
-        }
-
-        function displayHarvestedCredentials() {
-            if (!loginCredentials) return;
-
-            // Add prominent warning at the top of the page
-            const warningBox = document.createElement('div');
-            warningBox.style.cssText = 'background: #ffcdd2; border: 3px solid #d32f2f; padding: 20px; margin-bottom: 20px; border-radius: 8px; animation: fadeIn 0.5s ease-out;';
-            warningBox.innerHTML = `
-                <h2 style="color: #d32f2f; margin: 0 0 15px 0; font-size: 1.5em;">🚨 YOUR LOGIN CREDENTIALS WERE CAPTURED! 🚨</h2>
-                <div style="background: white; padding: 15px; border-radius: 6px; font-family: 'Courier New', monospace;">
-                    <p style="margin: 8px 0;"><strong>Username/Email:</strong> <span style="color: #d32f2f; font-weight: 600;">${loginCredentials.username}</span></p>
-                    <p style="margin: 8px 0;"><strong>Password:</strong> <span style="color: #d32f2f; font-weight: 600;">${loginCredentials.password}</span></p>
-                    <p style="margin: 8px 0;"><strong>Captured At:</strong> ${new Date(loginCredentials.timestamp).toLocaleString()}</p>
-                </div>
-                <p style="margin-top: 15px; color: #b71c1c; font-weight: 600; font-size: 1.05em;">
-                    ⚠️ A malicious site would now have access to your account! Never enter real credentials on suspicious sites.
-                </p>
-            `;
-
-            const container = document.querySelector('.container');
-            const warningBanner = document.querySelector('.warning-banner');
-            container.insertBefore(warningBox, warningBanner.nextSibling);
-
-            // Also add to privacy info section
-            addInfo('privacy-info', '🔑 Login Credentials STOLEN', `Username: ${loginCredentials.username}<br>Password: ${loginCredentials.password}`);
         }
 
         function displayLocationOnMap(position, enableTracking = false) {
@@ -882,17 +729,6 @@
                 });
             }
 
-            // Request motion sensors on mobile (iOS requires user gesture)
-            if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(permissionState => {
-                    if (permissionState === 'granted') {
-                        addInfo('sensors-info', '⚠️ Motion Sensors Granted', 'Tracking your movements');
-                        window.addEventListener('devicemotion', (event) => {
-                            // Now tracking motion
-                        });
-                    }
-                }).catch(() => {});
-            }
         }
 
         function startAnalyticsTracking() {
@@ -1011,54 +847,6 @@
                 <div class="info-value">${value}</div>
             `;
             container.appendChild(item);
-        }
-
-        // Populate critical info section
-        function populateCriticalInfo() {
-            const criticalContainer = document.getElementById('critical-info');
-
-            // Add login credentials if captured
-            if (loginCredentials) {
-                addInfo('critical-info', '🔑 STOLEN CREDENTIALS',
-                    `Username: ${loginCredentials.username}<br>Password: ${loginCredentials.password}`);
-            }
-
-            // Add placeholder for IP (will be updated by API)
-            addInfo('critical-info', '🌐 Your IP Address', '<span class="loading" id="critical-ip">Detecting...</span>');
-
-            // Add Time Zone
-            addInfo('critical-info', '🕐 Time Zone', Intl.DateTimeFormat().resolvedOptions().timeZone);
-
-            // Add User Agent
-            addInfo('critical-info', '💻 Browser Fingerprint', navigator.userAgent.substring(0, 80) + '...');
-
-            // Add Screen Resolution
-            addInfo('critical-info', '📺 Screen Size', `${screen.width} × ${screen.height}`);
-
-            // Add Platform
-            addInfo('critical-info', '🖥️ Platform', navigator.platform);
-
-            // Add Language
-            addInfo('critical-info', '🗣️ Language', navigator.language);
-
-            // Add Cookie Status
-            addInfo('critical-info', '🍪 Cookie Tracking', cookiesAccepted ?
-                '<span style="color: #ff4757; font-weight: 600;">ACTIVE - All cookies accepted</span>' :
-                '<span class="loading">Waiting for consent...</span>');
-
-            // Fetch and update IP
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    const ipEl = document.getElementById('critical-ip');
-                    if (ipEl) {
-                        ipEl.innerHTML = `<strong style="color: #ff4757;">${data.ip}</strong>`;
-                    }
-                })
-                .catch(() => {
-                    const ipEl = document.getElementById('critical-ip');
-                    if (ipEl) ipEl.textContent = 'Unable to detect';
-                });
         }
 
         // Device & Browser Information
@@ -1337,244 +1125,6 @@
                 addInfo('network-info', 'IP Geolocation', 'Unable to fetch');
             });
 
-        // ===== ADDITIONAL BROWSER FEATURES =====
-
-        // WebAssembly support
-        addInfo('features-info', 'WebAssembly', typeof WebAssembly !== 'undefined' ? 'Supported' : 'Not supported');
-
-        // Service Worker support
-        addInfo('features-info', 'Service Workers', 'serviceWorker' in navigator ? 'Supported' : 'Not supported');
-
-        // Web Workers
-        addInfo('features-info', 'Web Workers', typeof Worker !== 'undefined' ? 'Supported' : 'Not supported');
-
-        // WebSocket
-        addInfo('features-info', 'WebSocket', typeof WebSocket !== 'undefined' ? 'Supported' : 'Not supported');
-
-        // WebRTC
-        addInfo('features-info', 'WebRTC', !!(window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection) ? 'Supported' : 'Not supported');
-
-        // Notification API
-        addInfo('features-info', 'Notifications', 'Notification' in window ? 'Supported - Status: ' + Notification.permission : 'Not supported');
-
-        // Payment Request API
-        addInfo('features-info', 'Payment Request', 'PaymentRequest' in window ? 'Supported' : 'Not supported');
-
-        // Web Bluetooth
-        addInfo('features-info', 'Web Bluetooth', 'bluetooth' in navigator ? 'Supported' : 'Not supported');
-
-        // Web USB
-        addInfo('features-info', 'Web USB', 'usb' in navigator ? 'Supported' : 'Not supported');
-
-        // Web MIDI
-        addInfo('features-info', 'Web MIDI', 'requestMIDIAccess' in navigator ? 'Supported' : 'Not supported');
-
-        // Gamepad API
-        addInfo('features-info', 'Gamepad API', 'getGamepads' in navigator ? 'Supported' : 'Not supported');
-
-        // Clipboard API
-        addInfo('features-info', 'Clipboard API', 'clipboard' in navigator ? 'Supported' : 'Not supported');
-
-        // Share API
-        addInfo('features-info', 'Web Share', 'share' in navigator ? 'Supported' : 'Not supported');
-
-        // Vibration API
-        addInfo('features-info', 'Vibration', 'vibrate' in navigator ? 'Supported' : 'Not supported');
-
-        // Wake Lock API
-        addInfo('features-info', 'Wake Lock', 'wakeLock' in navigator ? 'Supported' : 'Not supported');
-
-        // Speech Recognition
-        addInfo('features-info', 'Speech Recognition', 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window ? 'Supported' : 'Not supported');
-
-        // Speech Synthesis
-        addInfo('features-info', 'Speech Synthesis', 'speechSynthesis' in window ? 'Supported' : 'Not supported');
-
-        // Pointer Lock API
-        addInfo('features-info', 'Pointer Lock', 'pointerLockElement' in document ? 'Supported' : 'Not supported');
-
-        // Fullscreen API
-        addInfo('features-info', 'Fullscreen', document.fullscreenEnabled ? 'Supported' : 'Not supported');
-
-        // Screen Orientation
-        if (screen.orientation) {
-            addInfo('features-info', 'Screen Orientation', screen.orientation.type + ' (' + screen.orientation.angle + '°)');
-        }
-
-        // Keyboard layout detection
-        if (navigator.keyboard) {
-            navigator.keyboard.getLayoutMap().then(map => {
-                addInfo('features-info', 'Keyboard Layout', 'Detected (' + map.size + ' keys mapped)');
-            }).catch(() => {
-                addInfo('features-info', 'Keyboard Layout', 'Unable to detect');
-            });
-        } else {
-            addInfo('features-info', 'Keyboard Layout', 'API not supported');
-        }
-
-        // Installed fonts detection (more thorough)
-        const baseFonts = ['monospace', 'sans-serif', 'serif'];
-        const testFonts = [
-            'Arial', 'Verdana', 'Times New Roman', 'Courier New', 'Georgia', 'Palatino',
-            'Garamond', 'Bookman', 'Comic Sans MS', 'Trebuchet MS', 'Impact', 'Lucida Console',
-            'Tahoma', 'Lucida Sans Unicode', 'Arial Black', 'Helvetica', 'Monaco', 'Consolas'
-        ];
-
-        const detectedFonts = [];
-        const testString = 'mmmmmmmmmmlli';
-        const testSize = '72px';
-
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-
-        function getTextWidth(font) {
-            context.font = testSize + ' ' + font;
-            return context.measureText(testString).width;
-        }
-
-        const baseWidths = {};
-        baseFonts.forEach(baseFont => {
-            baseWidths[baseFont] = getTextWidth(baseFont);
-        });
-
-        testFonts.forEach(testFont => {
-            let detected = false;
-            baseFonts.forEach(baseFont => {
-                const width = getTextWidth(`'${testFont}', ${baseFont}`);
-                if (width !== baseWidths[baseFont]) {
-                    detected = true;
-                }
-            });
-            if (detected) {
-                detectedFonts.push(testFont);
-            }
-        });
-
-        addInfo('features-info', 'Detected Fonts', detectedFonts.length + ' common fonts: ' + detectedFonts.join(', '));
-
-        // ===== SENSORS & PERMISSIONS =====
-
-        // Check for motion sensors
-        if (window.DeviceMotionEvent) {
-            const motionItem = document.createElement('div');
-            motionItem.className = 'info-item';
-            motionItem.innerHTML = `
-                <div class="info-label">Motion Sensors</div>
-                <div class="info-value" id="motion-value">
-                    <button class="request-permission-btn" onclick="requestMotion()">Request Motion Access</button>
-                </div>
-            `;
-            document.getElementById('sensors-info').appendChild(motionItem);
-        } else {
-            addInfo('sensors-info', 'Motion Sensors', 'Not supported');
-        }
-
-        // Check for orientation sensors
-        if (window.DeviceOrientationEvent) {
-            const orientationItem = document.createElement('div');
-            orientationItem.className = 'info-item';
-            orientationItem.innerHTML = `
-                <div class="info-label">Orientation Sensors</div>
-                <div class="info-value" id="orientation-value">
-                    <button class="request-permission-btn" onclick="requestOrientation()">Request Orientation Access</button>
-                </div>
-            `;
-            document.getElementById('sensors-info').appendChild(orientationItem);
-        } else {
-            addInfo('sensors-info', 'Orientation Sensors', 'Not supported');
-        }
-
-        // Ambient Light Sensor
-        if ('AmbientLightSensor' in window) {
-            addInfo('sensors-info', 'Light Sensor', 'Supported');
-        } else {
-            addInfo('sensors-info', 'Light Sensor', 'Not supported');
-        }
-
-        // Proximity Sensor
-        if ('ProximitySensor' in window) {
-            addInfo('sensors-info', 'Proximity Sensor', 'Supported');
-        } else {
-            addInfo('sensors-info', 'Proximity Sensor', 'Not supported');
-        }
-
-        // Check all permissions
-        if (navigator.permissions) {
-            const permissionsToCheck = [
-                'camera', 'microphone', 'geolocation', 'notifications',
-                'persistent-storage', 'push', 'midi', 'background-sync'
-            ];
-
-            permissionsToCheck.forEach(permission => {
-                navigator.permissions.query({name: permission}).then(result => {
-                    addInfo('sensors-info', permission.charAt(0).toUpperCase() + permission.slice(1) + ' Permission', result.state);
-                }).catch(() => {
-                    // Permission not supported
-                });
-            });
-        }
-
-        // ===== STORAGE & QUOTAS =====
-
-        // Storage Estimate
-        if (navigator.storage && navigator.storage.estimate) {
-            navigator.storage.estimate().then(estimate => {
-                const usage = (estimate.usage / 1024 / 1024).toFixed(2);
-                const quota = (estimate.quota / 1024 / 1024).toFixed(2);
-                const percentage = ((estimate.usage / estimate.quota) * 100).toFixed(2);
-                addInfo('storage-info', 'Storage Used', `${usage} MB of ${quota} MB (${percentage}%)`);
-            });
-        } else {
-            addInfo('storage-info', 'Storage Quota', 'API not supported');
-        }
-
-        // Check if storage is persisted
-        if (navigator.storage && navigator.storage.persisted) {
-            navigator.storage.persisted().then(isPersisted => {
-                addInfo('storage-info', 'Persistent Storage', isPersisted ? 'Yes' : 'No');
-            });
-        }
-
-        // Cookies
-        const cookieCount = document.cookie ? document.cookie.split(';').length : 0;
-        const cookieDisplay = document.cookie ?
-            `Yes (${cookieCount} cookies)<br><small style="font-size: 0.85em; opacity: 0.8;">${document.cookie}</small>` :
-            'None or inaccessible';
-        addInfo('storage-info', 'Cookies Accessible', cookieDisplay);
-
-        // Check localStorage for tracking data
-        try {
-            const trackingData = [];
-            if (localStorage.getItem('user_tracking_id')) {
-                trackingData.push(`User ID: ${localStorage.getItem('user_tracking_id')}`);
-            }
-            if (localStorage.getItem('session_id')) {
-                trackingData.push(`Session: ${localStorage.getItem('session_id')}`);
-            }
-            if (localStorage.getItem('cookie-consent')) {
-                trackingData.push('Cookie consent record');
-            }
-            if (trackingData.length > 0) {
-                addInfo('storage-info', '⚠️ Tracking IDs Stored', trackingData.join('<br>'));
-            }
-        } catch (e) {}
-
-        // Cache API
-        addInfo('storage-info', 'Cache API', 'caches' in window ? 'Supported' : 'Not supported');
-
-        // Check cache storage
-        if ('caches' in window) {
-            caches.keys().then(names => {
-                addInfo('storage-info', 'Cache Storage', names.length + ' cache(s): ' + (names.length > 0 ? names.join(', ') : 'None'));
-            });
-        }
-
-        // WebSQL (deprecated but still detectable)
-        addInfo('storage-info', 'WebSQL', 'openDatabase' in window ? 'Supported (deprecated)' : 'Not supported');
-
-        // File System API
-        addInfo('storage-info', 'File System Access', 'showOpenFilePicker' in window ? 'Supported' : 'Not supported');
-
         // ===== ADDITIONAL ADVANCED TRACKING =====
 
         // Mouse tracking snippet
@@ -1637,89 +1187,6 @@
             if (window.chrome.runtime) {
                 addInfo('fingerprint-info', 'Chrome Extensions', 'Runtime detected (extensions likely installed)');
             }
-        }
-
-        // Functions for sensor access
-        window.requestMotion = function() {
-            const motionValue = document.getElementById('motion-value');
-
-            if (typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission().then(permissionState => {
-                    if (permissionState === 'granted') {
-                        window.addEventListener('devicemotion', handleMotion);
-                        motionValue.innerHTML = '<span class="loading">Listening for motion...</span>';
-                    } else {
-                        motionValue.innerHTML = '<span class="permission-needed">Permission denied</span>';
-                    }
-                }).catch(() => {
-                    motionValue.innerHTML = '<span class="permission-needed">Error requesting permission</span>';
-                });
-            } else {
-                // Permission not needed
-                window.addEventListener('devicemotion', handleMotion);
-                motionValue.innerHTML = '<span class="loading">Listening for motion...</span>';
-            }
-        };
-
-        function handleMotion(event) {
-            const x = event.accelerationIncludingGravity.x?.toFixed(2) || 0;
-            const y = event.accelerationIncludingGravity.y?.toFixed(2) || 0;
-            const z = event.accelerationIncludingGravity.z?.toFixed(2) || 0;
-            document.getElementById('motion-value').innerHTML = `X: ${x}, Y: ${y}, Z: ${z} m/s²`;
-        }
-
-        window.requestOrientation = function() {
-            const orientationValue = document.getElementById('orientation-value');
-
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(permissionState => {
-                    if (permissionState === 'granted') {
-                        window.addEventListener('deviceorientation', handleOrientation);
-                        orientationValue.innerHTML = '<span class="loading">Listening for orientation...</span>';
-                    } else {
-                        orientationValue.innerHTML = '<span class="permission-needed">Permission denied</span>';
-                    }
-                }).catch(() => {
-                    orientationValue.innerHTML = '<span class="permission-needed">Error requesting permission</span>';
-                });
-            } else {
-                window.addEventListener('deviceorientation', handleOrientation);
-                orientationValue.innerHTML = '<span class="loading">Listening for orientation...</span>';
-            }
-        };
-
-        function handleOrientation(event) {
-            const alpha = event.alpha?.toFixed(1) || 0;
-            const beta = event.beta?.toFixed(1) || 0;
-            const gamma = event.gamma?.toFixed(1) || 0;
-            document.getElementById('orientation-value').innerHTML = `α: ${alpha}°, β: ${beta}°, γ: ${gamma}°`;
-        }
-
-        // Get voice synthesis voices (can indicate language packs installed)
-        if ('speechSynthesis' in window) {
-            let voices = speechSynthesis.getVoices();
-            if (voices.length === 0) {
-                speechSynthesis.onvoiceschanged = () => {
-                    voices = speechSynthesis.getVoices();
-                    addInfo('features-info', 'Speech Voices', voices.length + ' voices available');
-                };
-            } else {
-                addInfo('features-info', 'Speech Voices', voices.length + ' voices available');
-            }
-        }
-
-        // Check for Gamepads
-        if (navigator.getGamepads) {
-            const checkGamepads = () => {
-                const gamepads = navigator.getGamepads();
-                const connected = Array.from(gamepads).filter(gp => gp !== null);
-                if (connected.length > 0) {
-                    addInfo('sensors-info', 'Gamepads Connected', connected.length + ': ' + connected.map(g => g.id).join(', '));
-                }
-            };
-
-            window.addEventListener('gamepadconnected', checkGamepads);
-            checkGamepads();
         }
 
         // Detect incognito/private mode (heuristic)
