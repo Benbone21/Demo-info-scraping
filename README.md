@@ -4,71 +4,63 @@ Educational demonstration showing what information browsers expose to websites.
 
 ## Features
 
-- Simple cookie consent (Accept/Decline)
+- Cookie consent demonstration
 - Interactive map with geolocation
 - Real-time data collection
 - Browser fingerprinting demonstration
 - Privacy risk education
-- Data-dense, compact display
+- Comprehensive data display
 
 ## Quick Start
 
-1. Install dependencies:
+Simply open `index.html` in a web browser:
+
 ```bash
-npm install
+open index.html
 ```
 
-2. Start development server:
+Or start a local server:
+
 ```bash
-npm start
+# Python 3
+python -m http.server 8000
+
+# Python 2
+python -m SimpleHTTPServer 8000
+
+# Node.js (if you have http-server installed)
+npx http-server
 ```
 
-Opens at [http://localhost:3000](http://localhost:3000)
-
-3. Build for production:
-```bash
-npm run build
-```
+Then open http://localhost:8000
 
 ## Deploy to Cloudflare Pages
 
-See [DEPLOY.md](DEPLOY.md) for detailed instructions.
+### Method 1: GitHub Integration (Recommended)
 
-### Quick Deploy
-
-**Option 1: GitHub Integration**
 1. Push code to GitHub
-2. Connect repository in Cloudflare Pages
-3. Set build command: `npm run build`
-4. Set output directory: `build`
+2. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/)
+3. Navigate to **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**
+4. Select your repository
+5. Configure build settings:
+   - **Build command:** Leave empty
+   - **Build output directory:** `/` (root)
+   - **Framework preset:** None
+6. Click **Save and Deploy**
 
-**Option 2: Direct Upload**
-```bash
-npm run build
-```
-Then upload the `build` folder to Cloudflare Pages dashboard.
+### Method 2: Direct Upload
 
-**Option 3: Wrangler CLI**
+1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com/)
+2. Navigate to **Workers & Pages** → **Create application** → **Pages** → **Upload assets**
+3. Upload the `index.html` file
+4. Deploy
+
+### Method 3: Wrangler CLI
+
 ```bash
 npm install -g wrangler
 wrangler login
-npm run build
-wrangler pages deploy build --project-name=demo-info-scraping
-```
-
-## Project Structure
-
-```
-src/
-├── App.jsx                 # Main app
-├── components/
-│   ├── CookieConsent.jsx   # Simple cookie modal
-│   ├── LocationInfo.jsx    # Location with map
-│   ├── DeviceInfo.jsx      # Device data
-│   ├── HardwareInfo.jsx    # Hardware specs
-│   ├── NetworkInfo.jsx     # Network & IP
-│   ├── FingerprintInfo.jsx # Browser fingerprint
-│   └── ...                 # Other components
+wrangler pages deploy . --project-name=demo-info-scraping
 ```
 
 ## What Data is Collected
@@ -83,13 +75,6 @@ src/
 ## Privacy Note
 
 **All data collection is client-side only.** Nothing is sent to any server. This is purely educational to demonstrate what websites *can* collect.
-
-## Technologies
-
-- React 18
-- React Leaflet (maps)
-- OpenStreetMap
-- Browser APIs
 
 ## License
 
