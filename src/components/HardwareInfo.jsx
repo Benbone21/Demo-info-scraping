@@ -6,9 +6,9 @@ function HardwareInfo() {
     <div className="info-card">
       <h2>Display & Hardware</h2>
       <div>
-        <InfoItem label="Screen Resolution" value={`${screen.width} × ${screen.height}`} />
-        <InfoItem label="Available Screen" value={`${screen.availWidth} × ${screen.availHeight}`} />
-        <InfoItem label="Color Depth" value={`${screen.colorDepth} bits`} />
+        <InfoItem label="Screen Resolution" value={`${window.screen.width} × ${window.screen.height}`} />
+        <InfoItem label="Available Screen" value={`${window.screen.availWidth} × ${window.screen.availHeight}`} />
+        <InfoItem label="Color Depth" value={`${window.screen.colorDepth} bits`} />
         <InfoItem label="Pixel Ratio" value={window.devicePixelRatio} />
         <InfoItem label="Viewport Size" value={`${window.innerWidth} × ${window.innerHeight}`} />
         <InfoItem label="CPU Cores" value={navigator.hardwareConcurrency || 'Not available'} />
