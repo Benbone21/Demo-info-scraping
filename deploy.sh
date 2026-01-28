@@ -15,7 +15,7 @@ if [ $? -eq 0 ]; then
     echo "3. Upload the 'build' folder"
     echo ""
     echo "Or use Wrangler CLI:"
-    echo "  wrangler pages publish build --project-name=demo-info-scraping"
+    echo "  wrangler pages deploy build --project-name=demo-info-scraping"
 else
     echo "Build failed. Please fix errors and try again."
     exit 1

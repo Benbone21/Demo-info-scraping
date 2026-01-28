@@ -53,7 +53,7 @@ Then upload the `build` folder to Cloudflare Pages dashboard.
 npm install -g wrangler
 wrangler login
 npm run build
-wrangler pages publish build --project-name=demo-info-scraping
+wrangler pages deploy build --project-name=demo-info-scraping
 ```
 
 ## Project Structure

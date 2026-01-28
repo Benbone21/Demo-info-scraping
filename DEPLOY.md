@@ -17,12 +17,15 @@ git push -u origin main
 3. Navigate to **Workers & Pages** → **Create application** → **Pages** → **Connect to Git**
 4. Select your repository
 5. Configure build settings:
+   - **Framework preset:** Create React App
    - **Build command:** `npm run build`
    - **Build output directory:** `build`
-   - **Root directory:** `/` (leave blank or root)
+   - **Root directory:** `/` (leave blank)
 6. Click **Save and Deploy**
 
 Your site will be live at: `https://your-project-name.pages.dev`
+
+**IMPORTANT**: Make sure the build command is `npm run build` NOT `npx wrangler deploy`. Cloudflare Pages handles deployment automatically after the build.
 
 ### Method 2: Direct Upload (No Git Required)
 
@@ -52,8 +55,10 @@ wrangler login
 3. Build and deploy:
 ```bash
 npm run build
-wrangler pages publish build --project-name=demo-info-scraping
+wrangler pages deploy build --project-name=demo-info-scraping
 ```
+
+Note: No wrangler.toml file is needed for Pages deployments.
 
 ## Environment Setup
 
@@ -126,7 +131,7 @@ Then upload the new `build` folder through the dashboard.
 ### Via Wrangler (Method 3)
 ```bash
 npm run build
-wrangler pages publish build
+wrangler pages deploy build --project-name=demo-info-scraping
 ```
 
 ## Cost
