@@ -15,7 +15,10 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: url('Gigachad-1024x427-3344591563.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
             padding: 20px;
             font-size: 16px;
@@ -27,12 +30,13 @@
         }
 
         .warning-banner {
-            background: #ff4757;
+            background: rgba(255, 71, 87, 0.85);
             color: white;
             padding: 20px;
             border-radius: 8px;
             text-align: center;
             margin-bottom: 20px;
+            backdrop-filter: blur(10px);
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
             animation: slideDown 0.5s ease-out;
         }
@@ -95,10 +99,11 @@
         }
 
         .info-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
         }
 
         .info-card h2 {
@@ -177,181 +182,8 @@
             }
         }
 
-        /* Cookie consent modal */
-        .cookie-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .cookie-modal {
-            background: white;
-            border-radius: 8px;
-            padding: 25px;
-            max-width: 600px;
-            margin: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .cookie-modal h2 {
-            color: #333;
-            margin-bottom: 12px;
-            font-size: 1.4em;
-        }
-
-        .cookie-modal p {
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            font-size: 1em;
-        }
-
-        .cookie-options {
-            margin: 10px 0;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 2px;
-        }
-
-        .cookie-option {
-            display: flex;
-            align-items: center;
-            margin: 6px 0;
-            padding: 4px;
-        }
-
-        .cookie-option input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            margin-right: 8px;
-            cursor: pointer;
-        }
-
-        .cookie-option label {
-            color: #333;
-            cursor: pointer;
-            flex: 1;
-            font-size: 1em;
-        }
-
-        .cookie-option small {
-            display: block;
-            color: #666;
-            margin-top: 3px;
-            font-size: 0.85em;
-        }
-
-        .cookie-buttons {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .cookie-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .cookie-btn-accept {
-            background: #667eea;
-            color: white;
-        }
-
-        .cookie-btn-accept:hover {
-            background: #5568d3;
-        }
-
-        .cookie-btn-decline {
-            background: #e0e0e0;
-            color: #555;
-        }
-
-        .cookie-btn-decline:hover {
-            background: #d0d0d0;
-        }
-
-        .cookie-modal small.legal {
-            display: block;
-            margin-top: 15px;
-            color: #999;
-            font-size: 0.85em;
-            line-height: 1.4;
-        }
-
         .hidden {
             display: none;
-        }
-
-
-        /* Tracking indicator */
-        .tracking-indicator {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            background: #d32f2f;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.95em;
-            box-shadow: 0 2px 6px rgba(211, 47, 47, 0.4);
-            z-index: 9999;
-            animation: pulse 2s infinite;
-            display: none;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 4px 15px rgba(211, 47, 47, 0.4);
-            }
-            50% {
-                box-shadow: 0 4px 25px rgba(211, 47, 47, 0.8);
-            }
-        }
-
-        .tracking-indicator.active {
-            display: block;
-        }
-
-        .tracking-dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: #fff;
-            border-radius: 50%;
-            margin-right: 6px;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
         }
 
         /* Map container */
@@ -420,44 +252,265 @@
             text-align: center;
             font-weight: 600;
         }
+
+        /* VPN Simulator Styles */
+        .vpn-game {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeIn 0.8s ease-out 0.4s both;
+            border: 2px solid #667eea;
+        }
+
+        .vpn-game h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            text-align: center;
+        }
+
+        .vpn-toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .vpn-toggle {
+            position: relative;
+            width: 80px;
+            height: 40px;
+            background: #ff4757;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 10px rgba(255, 71, 87, 0.4);
+        }
+
+        .vpn-toggle.active {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            box-shadow: 0 2px 10px rgba(0, 184, 148, 0.4);
+        }
+
+        .vpn-toggle::before {
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 50%;
+            top: 4px;
+            left: 4px;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .vpn-toggle.active::before {
+            left: 44px;
+        }
+
+        .vpn-status {
+            font-weight: 700;
+            font-size: 1.1em;
+            min-width: 100px;
+        }
+
+        .vpn-status.off {
+            color: #ff4757;
+        }
+
+        .vpn-status.on {
+            color: #00b894;
+        }
+
+        .vpn-server-select {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .vpn-server-select.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .server-btn {
+            padding: 10px 18px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .server-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .server-btn.selected {
+            border-color: #00b894;
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            box-shadow: 0 3px 10px rgba(0, 184, 148, 0.3);
+        }
+
+        .server-flag {
+            font-size: 1.3em;
+        }
+
+        .vpn-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .vpn-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .vpn-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .vpn-panel.exposed {
+            border: 2px solid #ff4757;
+        }
+
+        .vpn-panel.protected {
+            border: 2px solid #00b894;
+        }
+
+        .vpn-panel h3 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vpn-panel.exposed h3 {
+            color: #ff4757;
+        }
+
+        .vpn-panel.protected h3 {
+            color: #00b894;
+        }
+
+        .vpn-data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95em;
+        }
+
+        .vpn-data-item:last-child {
+            border-bottom: none;
+        }
+
+        .vpn-data-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .vpn-data-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .vpn-panel.exposed .vpn-data-value {
+            color: #d32f2f;
+        }
+
+        .vpn-panel.protected .vpn-data-value {
+            color: #00b894;
+        }
+
+        .shield-icon {
+            font-size: 1.4em;
+        }
+
+        .vpn-explanation {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.95em;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        /* Glow animation for protected panel */
+        @keyframes protectedGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(0, 184, 148, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(0, 184, 148, 0.5); }
+        }
+
+        .vpn-panel.protected.active-glow {
+            animation: protectedGlow 2s ease-in-out infinite;
+        }
+
+        /* Shake animation for exposed panel */
+        @keyframes exposedShake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+            20%, 40%, 60%, 80% { transform: translateX(2px); }
+        }
+
+        .vpn-panel.exposed.shake {
+            animation: exposedShake 0.5s ease-in-out;
+        }
+
     </style>
 </head>
 <body>
-    <!-- Tracking Indicator -->
-    <div id="tracking-indicator" class="tracking-indicator">
-        <span class="tracking-dot"></span>
-        🔴 TRACKING ACTIVE
-    </div>
-
     <div class="container">
         <div class="warning-banner">
-            <h1>⚠️ DATA HARVESTED ⚠️</h1>
+            <h1>DATA HARVESTED</h1>
             <p>This page has collected the following information from your browser</p>
             <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">(This is a demonstration - no data is being sent anywhere)</p>
         </div>
 
-        <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 15px; background: #fff3cd; border-left: 4px solid #ffc107;">
+        <div class="info-card" style="animation: fadeIn 0.8s ease-out 0.2s both; margin-bottom: 15px; background: rgba(255, 243, 205, 0.85); border-left: 4px solid #ffc107;">
             <h2 style="color: #856404;">Security Risks</h2>
             <div style="color: #333; line-height: 1.5; font-size: 1em;">
                 <p style="margin-bottom: 10px;">
                     <strong>QR Code Dangers:</strong> Phishing, malware, payment fraud, location tracking, data harvesting.
                     <strong>Data Collected:</strong> IP address (ISP/location), device fingerprint (screen/fonts/GPU), hardware specs, behavior patterns, network IPs (via WebRTC), privacy settings.
-                    <strong>Cookie Consent Tricks:</strong> Pre-checked boxes, confusing language, dark patterns, unnecessary permissions.
+                    <strong>Note:</strong> This page could have included a fake login for a church, school, or any organization to capture your credentials - we didn't for simplicity and legality, but attackers do.
                 </p>
                 <p style="margin-bottom: 10px;">
-                    <strong>Protection:</strong> Verify QR sources • Decline cookies by default • Deny permissions • Use privacy browsers (Firefox/Brave) • Install uBlock Origin/Privacy Badger • Enable VPN • Disable 3rd-party cookies • Never enter real credentials on unfamiliar sites
+                    <strong>Protection:</strong> Verify QR sources • Deny permissions • Use privacy browsers (Firefox/Brave) • Install uBlock Origin/Privacy Badger • Enable VPN • Disable 3rd-party cookies • Never enter real credentials on unfamiliar sites
                 </p>
             </div>
         </div>
 
         <div class="info-grid">
             <div class="info-card">
-                <h2>🌐 Network & IP Information</h2>
+                <h2>Network, Location & Time</h2>
                 <div id="network-info"></div>
-            </div>
-
-            <div class="info-card">
-                <h2>🌍 Location & Network</h2>
                 <div id="location-info"></div>
 
                 <!-- Interactive Map -->
@@ -467,106 +520,147 @@
 
                 <!-- Location Details Box -->
                 <div id="location-details" class="location-info-box">
-                    <h3>📍 Your Exact Location Has Been Captured</h3>
+                    <h3>Your Exact Location Has Been Captured</h3>
                     <p><strong>Address:</strong> <span id="map-address" style="color: #d32f2f; font-weight: 600;">Loading...</span></p>
                     <p><strong>Latitude:</strong> <span id="map-lat">-</span></p>
                     <p><strong>Longitude:</strong> <span id="map-lon">-</span></p>
                     <p><strong>Accuracy:</strong> <span id="map-accuracy">-</span></p>
-                    <p><strong>Altitude:</strong> <span id="map-altitude">-</span></p>
-                    <p><strong>Speed:</strong> <span id="map-speed">-</span></p>
                     <div class="map-warning">
-                        ⚠️ A malicious website could use this to track your movements, find your home address, or stalk you!
+                        A malicious website could use this to track your movements, find your home address, or stalk you!
                     </div>
                 </div>
             </div>
 
             <div class="info-card">
-                <h2>📱 Device & Browser Information</h2>
+                <h2>Device, Browser & Hardware</h2>
                 <div id="device-info"></div>
-            </div>
-
-            <div class="info-card">
-                <h2>🖥️ Display & Hardware</h2>
                 <div id="hardware-info"></div>
             </div>
 
             <div class="info-card">
-                <h2>🔒 Privacy & Settings</h2>
+                <h2>Privacy, Settings & Fingerprinting</h2>
                 <div id="privacy-info"></div>
-            </div>
-
-            <div class="info-card">
-                <h2>🎨 Advanced Fingerprinting</h2>
                 <div id="fingerprint-info"></div>
             </div>
-
         </div>
+
+        <!-- Games Section -->
+        <h2 style="color: white; text-align: center; margin: 30px 0 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 1.8em;">Interactive Privacy Demos</h2>
+
+        <!-- VPN Simulator Game -->
+        <div class="vpn-game">
+            <h2>VPN Simulator: See the Difference</h2>
+
+            <div class="vpn-toggle-container">
+                <span class="vpn-status off" id="vpn-status">VPN OFF</span>
+                <div class="vpn-toggle" id="vpn-toggle" onclick="toggleVPN()"></div>
+                <span style="color: #666; font-size: 0.9em;">Click to toggle</span>
+            </div>
+
+            <div class="vpn-server-select" id="server-select">
+                <button class="server-btn selected" data-server="germany" onclick="selectServer(this)">
+                    <span class="server-flag">🇩🇪</span> Germany
+                </button>
+                <button class="server-btn" data-server="japan" onclick="selectServer(this)">
+                    <span class="server-flag">🇯🇵</span> Japan
+                </button>
+                <button class="server-btn" data-server="brazil" onclick="selectServer(this)">
+                    <span class="server-flag">🇧🇷</span> Brazil
+                </button>
+                <button class="server-btn" data-server="australia" onclick="selectServer(this)">
+                    <span class="server-flag">🇦🇺</span> Australia
+                </button>
+            </div>
+
+            <div class="vpn-comparison">
+                <div class="vpn-panel exposed" id="exposed-panel">
+                    <h3><span class="shield-icon">🚨</span> Without VPN (Exposed)</h3>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Your IP:</span>
+                        <span class="vpn-data-value" id="real-ip">Loading...</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Location:</span>
+                        <span class="vpn-data-value" id="real-location">Loading...</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">ISP:</span>
+                        <span class="vpn-data-value" id="real-isp">Loading...</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Time Zone:</span>
+                        <span class="vpn-data-value" id="real-timezone">Loading...</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Visible to:</span>
+                        <span class="vpn-data-value">Everyone</span>
+                    </div>
+                </div>
+
+                <div class="vpn-panel protected" id="protected-panel">
+                    <h3><span class="shield-icon">🛡️</span> With VPN (Protected)</h3>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Masked IP:</span>
+                        <span class="vpn-data-value" id="vpn-ip">---</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Location:</span>
+                        <span class="vpn-data-value" id="vpn-location">---</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">ISP:</span>
+                        <span class="vpn-data-value" id="vpn-isp">---</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Time Zone:</span>
+                        <span class="vpn-data-value" id="vpn-timezone">---</span>
+                    </div>
+                    <div class="vpn-data-item">
+                        <span class="vpn-data-label">Visible to:</span>
+                        <span class="vpn-data-value" id="vpn-visible">---</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vpn-explanation" id="vpn-explanation">
+                Toggle the VPN switch above to see how your data appears to websites with and without protection.
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Cookie consent functions
-        let cookiesAccepted = false;
         let map = null;
         let marker = null;
 
-        function acceptCookies() {
-            // BOTH BUTTONS ACCEPT COOKIES - Dark Pattern Example!
-            // Users think they can decline, but both options accept everything
-            const functional = true;
-            const analytics = true;
-            const marketing = true;
+        // Global storage for real user data (used by VPN simulator)
+        let realUserData = {
+            ip: 'Loading...',
+            location: 'Loading...',
+            isp: 'Loading...',
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        };
 
-            cookiesAccepted = true;
+        // Fallback: if data isn't loaded after 5 seconds, show error
+        setTimeout(() => {
+            if (realUserData.ip === 'Loading...') {
+                realUserData.ip = 'Unable to fetch';
+                const el = document.getElementById('real-ip');
+                if (el) el.textContent = 'Unable to fetch';
+            }
+            if (realUserData.location === 'Loading...') {
+                realUserData.location = 'Unknown';
+                const el = document.getElementById('real-location');
+                if (el) el.textContent = 'Unknown';
+            }
+            if (realUserData.isp === 'Loading...') {
+                realUserData.isp = 'Unknown';
+                const el = document.getElementById('real-isp');
+                if (el) el.textContent = 'Unknown';
+            }
+        }, 5000);
 
-            // Store preferences and set tracking cookies
-            try {
-                localStorage.setItem('cookie-consent', JSON.stringify({
-                    essential: true,
-                    functional: functional,
-                    analytics: analytics,
-                    marketing: marketing,
-                    timestamp: new Date().toISOString(),
-                    darkPattern: true  // Flag showing deception
-                }));
-
-                // Set various tracking cookies (demonstrative)
-                const userId = 'user_' + Math.random().toString(36).substr(2, 9);
-                const sessionId = 'session_' + Math.random().toString(36).substr(2, 9);
-
-                document.cookie = `user_id=${userId}; max-age=31536000; path=/`; // 1 year
-                document.cookie = `session_id=${sessionId}; path=/`;
-                document.cookie = `_ga=${Math.random().toString(36).substr(2)}; max-age=63072000; path=/`; // Google Analytics style
-                document.cookie = `_fbp=${Math.random().toString(36).substr(2)}; max-age=7776000; path=/`; // Facebook Pixel style
-                document.cookie = `analytics_tracking=enabled; max-age=31536000; path=/`;
-                document.cookie = `marketing_id=${Math.random().toString(36).substr(2)}; max-age=31536000; path=/`;
-                document.cookie = `ad_targeting=enabled; max-age=31536000; path=/`;
-
-                // Store tracking IDs
-                localStorage.setItem('user_tracking_id', userId);
-                localStorage.setItem('session_id', sessionId);
-                localStorage.setItem('first_visit', new Date().toISOString());
-
-            } catch (e) {}
-
-            // Hide modal
-            document.getElementById('cookie-overlay').classList.add('hidden');
-
-            // Show tracking indicator
-            document.getElementById('tracking-indicator').classList.add('active');
-
-            // Request additional permissions
-            setTimeout(() => {
-                requestAdditionalPermissions();
-            }, 500);
-
-            // Start enhanced tracking
-            startAnalyticsTracking();
-
-            // Add tracking indicators
-            addTrackingNotifications(functional, analytics, marketing);
-        }
-
-        function displayLocationOnMap(position, enableTracking = false) {
+        function displayLocationOnMap(position) {
             const lat = position.coords.latitude;
             const lon = position.coords.longitude;
             const accuracy = position.coords.accuracy;
@@ -574,35 +668,6 @@
             // Show map container
             document.getElementById('map-container').classList.add('visible');
             document.getElementById('location-details').classList.add('visible');
-
-            // Enable continuous tracking
-            if (enableTracking && navigator.geolocation) {
-                navigator.geolocation.watchPosition(
-                    (newPosition) => {
-                        const newLat = newPosition.coords.latitude;
-                        const newLon = newPosition.coords.longitude;
-
-                        // Update marker position
-                        if (marker) {
-                            marker.setLatLng([newLat, newLon]);
-                            marker.bindPopup(`<strong>📍 YOU ARE HERE (TRACKING)</strong><br>Lat: ${newLat.toFixed(6)}<br>Lon: ${newLon.toFixed(6)}`).openPopup();
-                        }
-
-                        // Update details
-                        document.getElementById('map-lat').textContent = newLat.toFixed(6);
-                        document.getElementById('map-lon').textContent = newLon.toFixed(6);
-                        document.getElementById('map-accuracy').textContent = `±${newPosition.coords.accuracy.toFixed(0)} meters`;
-
-                        // Show tracking indicator
-                        const warningDiv = document.querySelector('.map-warning');
-                        if (warningDiv) {
-                            warningDiv.innerHTML = '🔴 CONTINUOUSLY TRACKING YOUR LOCATION - We know where you are at all times!';
-                        }
-                    },
-                    null,
-                    { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
-                );
-            }
 
             // Initialize map if not already done
             if (!map) {
@@ -621,7 +686,7 @@
                 });
 
                 marker = L.marker([lat, lon], { icon: pulsingIcon }).addTo(map);
-                marker.bindPopup(`<strong>📍 YOU ARE HERE</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}`).openPopup();
+                marker.bindPopup(`<strong>YOU ARE HERE</strong><br>Lat: ${lat.toFixed(6)}<br>Lon: ${lon.toFixed(6)}`).openPopup();
 
                 // Add accuracy circle
                 L.circle([lat, lon], {
@@ -660,10 +725,6 @@
             document.getElementById('map-lat').textContent = lat.toFixed(6);
             document.getElementById('map-lon').textContent = lon.toFixed(6);
             document.getElementById('map-accuracy').textContent = `±${accuracy.toFixed(0)} meters`;
-            document.getElementById('map-altitude').textContent = position.coords.altitude ?
-                `${position.coords.altitude.toFixed(0)} meters` : 'Not available';
-            document.getElementById('map-speed').textContent = position.coords.speed ?
-                `${position.coords.speed.toFixed(2)} m/s` : 'Not available';
 
             // Reverse geocode to get address
             fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`)
@@ -671,23 +732,6 @@
                 .then(data => {
                     if (data.display_name) {
                         document.getElementById('map-address').innerHTML = `<strong style="color: #d32f2f;">${data.display_name}</strong>`;
-
-                        // Add a prominent warning about the specific address
-                        const addressWarning = document.createElement('div');
-                        addressWarning.style.cssText = 'background: #ffcdd2; padding: 12px; border-radius: 6px; margin-top: 12px; border: 2px solid #d32f2f;';
-                        addressWarning.innerHTML = `
-                            <strong style="color: #b71c1c; font-size: 1.1em;">🚨 YOUR PHYSICAL ADDRESS IS EXPOSED!</strong><br>
-                            <span style="font-size: 0.9em;">A malicious website could now:</span>
-                            <ul style="margin: 8px 0 0 20px; font-size: 0.85em;">
-                                <li>Know where you live or work</li>
-                                <li>Track your daily movements</li>
-                                <li>Target you for robbery</li>
-                                <li>Stalk or harass you</li>
-                                <li>Sell your location history</li>
-                            </ul>
-                        `;
-                        const detailsBox = document.getElementById('location-details');
-                        detailsBox.appendChild(addressWarning);
                     } else {
                         document.getElementById('map-address').textContent = 'Address lookup failed';
                     }
@@ -697,149 +741,22 @@
                 });
 
             // Add to info section
-            addInfo('location-info', '⚠️ Precise Location (from consent)',
+            addInfo('location-info', 'Precise Location (from consent)',
                 `Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}<br>` +
                 `Accuracy: ${accuracy}m<br>` +
                 `<strong style="color: #d32f2f;">Your exact location is shown on the map below!</strong>`
             );
         }
 
-        function requestAdditionalPermissions() {
-            // Request geolocation with continuous tracking
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    position => {
-                        displayLocationOnMap(position, true); // Enable continuous tracking
-                    },
-                    error => {
-                        addInfo('privacy-info', 'Geolocation Request', 'User denied (smart choice!)');
-                    },
-                    { enableHighAccuracy: true }
-                );
-            }
-
-            // Request notification permission
-            if ('Notification' in window && Notification.permission === 'default') {
-                Notification.requestPermission().then(permission => {
-                    addInfo('privacy-info', 'Notification Permission', permission);
-                    if (permission === 'granted') {
-                        // Could send notifications now
-                        addInfo('privacy-info', '⚠️ Notifications Enabled', 'Site can now send you notifications anytime');
-                    }
-                });
-            }
-
-        }
-
-        function startAnalyticsTracking() {
-            // Track detailed mouse movements
-            let mouseLog = [];
-            document.addEventListener('mousemove', (e) => {
-                mouseLog.push({x: e.clientX, y: e.clientY, time: Date.now()});
-                if (mouseLog.length > 100) mouseLog.shift(); // Keep last 100
-            });
-
-            // Track all clicks with details
-            document.addEventListener('click', (e) => {
-                const clickData = {
-                    x: e.clientX,
-                    y: e.clientY,
-                    element: e.target.tagName,
-                    time: new Date().toISOString()
-                };
-                console.log('Click tracked:', clickData);
-            });
-
-            // Track scroll depth
-            let maxScroll = 0;
-            window.addEventListener('scroll', () => {
-                const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-                if (scrollPercent > maxScroll) {
-                    maxScroll = scrollPercent;
-                }
-            });
-
-            // Track time on page
-            const startTime = Date.now();
-            setInterval(() => {
-                const timeOnPage = Math.floor((Date.now() - startTime) / 1000);
-                // This would normally be sent to analytics server
-            }, 10000); // Every 10 seconds
-
-            // Track visibility changes (did they switch tabs?)
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    console.log('User left page - tracking this');
-                } else {
-                    console.log('User returned to page - tracking this');
-                }
-            });
-
-            addInfo('privacy-info', '📊 Analytics Tracking',
-                'Recording: mouse movements, clicks, scroll depth, time on page, tab switches, etc.');
-        }
-
-        function addTrackingNotifications(functional, analytics, marketing) {
-            // Add dark pattern notification
-            addInfo('privacy-info', '⚠️ Cookie Dark Pattern', 'BOTH buttons accepted ALL cookies - deceptive design!');
-
-            if (functional) {
-                addInfo('privacy-info', '🔴 Functional Tracking', 'ACTIVE - Collecting location, sensors, device data');
-            }
-            if (analytics) {
-                addInfo('privacy-info', '🔴 Analytics Tracking', 'ACTIVE - Recording all interactions, clicks, scrolls, time spent');
-            }
-            if (marketing) {
-                addInfo('privacy-info', '🔴 Marketing Tracking', 'ACTIVE - Building advertising profile, sharing with 3rd parties');
-            }
-
-            // Show what accepting cookies enabled
-            const warningBox = document.createElement('div');
-            warningBox.style.cssText = 'background: #ffebee; border-left: 4px solid #d32f2f; padding: 20px; margin-bottom: 20px; border-radius: 8px;';
-            warningBox.innerHTML = `
-                <strong style="color: #d32f2f; font-size: 1.2em;">🚨 COOKIE DARK PATTERN DETECTED!</strong>
-                <p style="margin: 10px 0; font-size: 1.05em;">
-                    <strong>You clicked:</strong> "${event.target.textContent}" but ALL cookies were accepted regardless!
-                </p>
-                <p style="margin: 10px 0; background: #fff; padding: 12px; border-radius: 6px;">
-                    This is a <strong>dark pattern</strong> - a deceptive design that tricks users into accepting everything
-                    even when they think they're declining. Real malicious sites use this technique.
-                </p>
-                <strong style="color: #d32f2f;">⚠️ What was activated:</strong>
-                <ul style="margin: 10px 0 0 20px; line-height: 1.8;">
-                    <li>Access to your precise location</li>
-                    <li>Read device sensors (motion, orientation)</li>
-                    <li>Track every mouse movement and click</li>
-                    <li>Record how long you spend on this page</li>
-                    <li>Build a detailed profile for targeted advertising</li>
-                    <li>Share your data with third-party advertisers</li>
-                    <li>Store this data indefinitely</li>
-                    <li>Set multiple tracking cookies (user ID, session ID, analytics IDs)</li>
-                </ul>
-                <p style="margin-top: 15px; padding: 12px; background: #fff; border-radius: 6px; font-size: 1em;">
-                    <strong>Cookies set:</strong> ${document.cookie.split(';').length} tracking cookies are now active on your device.
-                    Check the "Storage & Quotas" section below to see them.
-                </p>
-            `;
-
-            const container = document.querySelector('.container');
-            const firstCard = document.querySelector('.info-grid');
-            container.insertBefore(warningBox, firstCard);
-
-            // Update the cookie display to show newly set cookies
-            setTimeout(() => {
-                const cookieInfo = document.cookie ? 'Yes (' + document.cookie.split(';').length + ' cookies) - ' + document.cookie : 'None';
-                const cookieElements = Array.from(document.querySelectorAll('.info-label')).find(el => el.textContent === 'Cookies Accessible');
-                if (cookieElements) {
-                    cookieElements.nextElementSibling.innerHTML = cookieInfo;
-                }
-            }, 100);
-        }
-
         // Helper function to create info items
         function addInfo(containerId, label, value) {
             const container = document.getElementById(containerId);
             if (!container) return;
+
+            // Skip if value is unavailable/unknown
+            const skipValues = ['Not available', 'Unknown', 'Not set', 'Unable to fetch', 'Unable to determine', null, undefined, ''];
+            if (skipValues.includes(value) || value === 0 || value === '0') return;
+
             const item = document.createElement('div');
             item.className = 'info-item';
             item.innerHTML = `
@@ -852,7 +769,7 @@
         // Device & Browser Information
         addInfo('device-info', 'User Agent', navigator.userAgent);
         addInfo('device-info', 'Platform', navigator.platform);
-        addInfo('device-info', 'Vendor', navigator.vendor || 'Not available');
+        addInfo('device-info', 'Vendor', navigator.vendor);
         addInfo('device-info', 'Language', navigator.language);
         addInfo('device-info', 'Languages', navigator.languages.join(', '));
         addInfo('device-info', 'Online Status', navigator.onLine ? 'Online' : 'Offline');
@@ -868,13 +785,13 @@
         // Connection information
         if (navigator.connection || navigator.mozConnection || navigator.webkitConnection) {
             const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-            addInfo('location-info', 'Connection Type', conn.effectiveType || 'Unknown');
-            addInfo('location-info', 'Downlink Speed', conn.downlink ? conn.downlink + ' Mbps' : 'Unknown');
-            addInfo('location-info', 'RTT', conn.rtt ? conn.rtt + ' ms' : 'Unknown');
-            addInfo('location-info', 'Save Data Mode', conn.saveData ? 'Enabled' : 'Disabled');
+            addInfo('location-info', 'Connection Type', conn.effectiveType);
+            if (conn.downlink) addInfo('location-info', 'Downlink Speed', conn.downlink + ' Mbps');
+            if (conn.rtt) addInfo('location-info', 'RTT', conn.rtt + ' ms');
+            if (conn.saveData !== undefined) addInfo('location-info', 'Save Data Mode', conn.saveData ? 'Enabled' : 'Disabled');
         }
 
-        // Geolocation (requires permission) - will be auto-requested if cookies accepted
+        // Geolocation (requires permission)
         const geoContainer = document.getElementById('location-info');
         const geoItem = document.createElement('div');
         geoItem.className = 'info-item';
@@ -886,21 +803,14 @@
         `;
         geoContainer.appendChild(geoItem);
 
-        // Show cookie consent status
-        if (cookiesAccepted) {
-            addInfo('privacy-info', 'Cookie Consent Status', '✅ Accepted - Full tracking enabled');
-        } else {
-            addInfo('privacy-info', 'Cookie Consent Status', 'Pending or declined');
-        }
-
         // Display & Hardware
         addInfo('hardware-info', 'Screen Resolution', `${screen.width} × ${screen.height}`);
         addInfo('hardware-info', 'Available Screen', `${screen.availWidth} × ${screen.availHeight}`);
         addInfo('hardware-info', 'Color Depth', screen.colorDepth + ' bits');
         addInfo('hardware-info', 'Pixel Ratio', window.devicePixelRatio);
         addInfo('hardware-info', 'Viewport Size', `${window.innerWidth} × ${window.innerHeight}`);
-        addInfo('hardware-info', 'CPU Cores', navigator.hardwareConcurrency || 'Not available');
-        addInfo('hardware-info', 'Device Memory', navigator.deviceMemory ? navigator.deviceMemory + ' GB' : 'Not available');
+        addInfo('hardware-info', 'CPU Cores', navigator.hardwareConcurrency);
+        if (navigator.deviceMemory) addInfo('hardware-info', 'Device Memory', navigator.deviceMemory + ' GB');
         addInfo('hardware-info', 'Max Touch Points', navigator.maxTouchPoints || 0);
 
         // Privacy & Settings
@@ -932,7 +842,7 @@
         }
 
         // IndexedDB
-        addInfo('privacy-info', 'IndexedDB', window.indexedDB ? 'Available' : 'Not available');
+        if (window.indexedDB) addInfo('privacy-info', 'IndexedDB', 'Available');
 
         // Advanced Fingerprinting
         // Canvas Fingerprinting
@@ -962,7 +872,7 @@
                 addInfo('fingerprint-info', 'WebGL Version', gl.getParameter(gl.VERSION));
             }
         } catch (e) {
-            addInfo('fingerprint-info', 'WebGL', 'Not available');
+            // WebGL not available - skip
         }
 
         // Audio Context Fingerprinting
@@ -985,7 +895,7 @@
             oscillator.stop();
             audioContext.close();
         } catch (e) {
-            addInfo('fingerprint-info', 'Audio Context', 'Not available');
+            // Audio context not available - skip
         }
 
         // Fonts detection (simplified)
@@ -997,8 +907,6 @@
                 addInfo('fingerprint-info', 'Battery Level', Math.round(battery.level * 100) + '%');
                 addInfo('fingerprint-info', 'Battery Charging', battery.charging ? 'Yes' : 'No');
             });
-        } else {
-            addInfo('fingerprint-info', 'Battery Info', 'Not available');
         }
 
         // Media Devices
@@ -1019,7 +927,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     position => {
-                        geoValue.innerHTML = `<strong style="color: #d32f2f;">✓ Location Granted</strong><br>See map below`;
+                        geoValue.innerHTML = `<strong style="color: #d32f2f;">Location Granted</strong><br>See map below`;
                         displayLocationOnMap(position);
                     },
                     error => {
@@ -1095,34 +1003,74 @@
             .then(response => response.json())
             .then(data => {
                 addInfo('network-info', 'Public IPv4', data.ip);
-            })
-            .catch(() => {
-                addInfo('network-info', 'Public IP', 'Unable to fetch');
-            });
 
-        // Try IPv6
-        fetch('https://api64.ipify.org?format=json')
-            .then(response => response.json())
-            .then(data => {
-                addInfo('network-info', 'Public IPv6', data.ip);
+                // Also update VPN simulator IP if not already set
+                if (realUserData.ip === 'Loading...') {
+                    realUserData.ip = data.ip;
+                    const realIpEl = document.getElementById('real-ip');
+                    if (realIpEl) realIpEl.textContent = data.ip;
+                }
             })
             .catch(() => {
-                addInfo('network-info', 'Public IPv6', 'Not available');
+                // Unable to fetch - skip
             });
 
         // Get IP info with geolocation
         fetch('https://ipapi.co/json/')
             .then(response => response.json())
             .then(data => {
-                addInfo('network-info', 'ISP', data.org || 'Unknown');
-                addInfo('network-info', 'City (from IP)', data.city || 'Unknown');
-                addInfo('network-info', 'Region', data.region || 'Unknown');
-                addInfo('network-info', 'Country', data.country_name || 'Unknown');
-                addInfo('network-info', 'Postal Code', data.postal || 'Unknown');
-                addInfo('network-info', 'ASN', data.asn || 'Unknown');
+                addInfo('network-info', 'ISP', data.org);
+                addInfo('network-info', 'City (from IP)', data.city);
+                addInfo('network-info', 'Region', data.region);
+                addInfo('network-info', 'Country', data.country_name);
+                addInfo('network-info', 'Postal Code', data.postal);
+                addInfo('network-info', 'ASN', data.asn);
+
+                // Also update VPN simulator with real data
+                realUserData.ip = data.ip || 'Unknown';
+                realUserData.location = (data.city && data.country_name)
+                    ? `${data.city}, ${data.country_name}`
+                    : 'Unknown';
+                realUserData.isp = data.org || 'Unknown ISP';
+
+                const realIpEl = document.getElementById('real-ip');
+                const realLocEl = document.getElementById('real-location');
+                const realIspEl = document.getElementById('real-isp');
+
+                if (realIpEl) realIpEl.textContent = realUserData.ip;
+                if (realLocEl) realLocEl.textContent = realUserData.location;
+                if (realIspEl) realIspEl.textContent = realUserData.isp;
             })
             .catch(() => {
-                addInfo('network-info', 'IP Geolocation', 'Unable to fetch');
+                // Fallback: use ipify for just the IP
+                fetch('https://api.ipify.org?format=json')
+                    .then(r => r.json())
+                    .then(d => {
+                        realUserData.ip = d.ip || 'Unable to fetch';
+                        realUserData.location = 'Unknown';
+                        realUserData.isp = 'Unknown';
+
+                        const realIpEl = document.getElementById('real-ip');
+                        const realLocEl = document.getElementById('real-location');
+                        const realIspEl = document.getElementById('real-isp');
+
+                        if (realIpEl) realIpEl.textContent = realUserData.ip;
+                        if (realLocEl) realLocEl.textContent = realUserData.location;
+                        if (realIspEl) realIspEl.textContent = realUserData.isp;
+                    })
+                    .catch(() => {
+                        realUserData.ip = 'Unable to fetch';
+                        realUserData.location = 'Unable to fetch';
+                        realUserData.isp = 'Unable to fetch';
+
+                        const realIpEl = document.getElementById('real-ip');
+                        const realLocEl = document.getElementById('real-location');
+                        const realIspEl = document.getElementById('real-isp');
+
+                        if (realIpEl) realIpEl.textContent = realUserData.ip;
+                        if (realLocEl) realLocEl.textContent = realUserData.location;
+                        if (realIspEl) realIspEl.textContent = realUserData.isp;
+                    });
             });
 
         // ===== ADDITIONAL ADVANCED TRACKING =====
@@ -1223,6 +1171,114 @@
             const limitMB = (performance.memory.jsHeapSizeLimit / 1048576).toFixed(2);
             addInfo('fingerprint-info', 'JS Heap Memory', `${usedMB} MB used / ${totalMB} MB total (limit: ${limitMB} MB)`);
         }
+
+        // ===== VPN SIMULATOR GAME =====
+
+        let vpnEnabled = false;
+        let selectedServer = 'germany';
+
+        // Populate real timezone immediately
+        document.getElementById('real-timezone').textContent = realUserData.timezone;
+
+        // Fake VPN server data
+        const vpnServers = {
+            germany: {
+                ip: '185.193.126.' + Math.floor(Math.random() * 255),
+                location: 'Frankfurt, Germany',
+                isp: 'SecureVPN GmbH',
+                timezone: 'Europe/Berlin'
+            },
+            japan: {
+                ip: '103.73.66.' + Math.floor(Math.random() * 255),
+                location: 'Tokyo, Japan',
+                isp: 'PrivacyShield Co.',
+                timezone: 'Asia/Tokyo'
+            },
+            brazil: {
+                ip: '177.54.144.' + Math.floor(Math.random() * 255),
+                location: 'São Paulo, Brazil',
+                isp: 'AnonBrasil VPN',
+                timezone: 'America/Sao_Paulo'
+            },
+            australia: {
+                ip: '103.86.96.' + Math.floor(Math.random() * 255),
+                location: 'Sydney, Australia',
+                isp: 'DownUnder Privacy',
+                timezone: 'Australia/Sydney'
+            }
+        };
+
+        // Note: Real user data is populated by the earlier ipapi.co fetch
+
+        function toggleVPN() {
+            vpnEnabled = !vpnEnabled;
+            const toggle = document.getElementById('vpn-toggle');
+            const status = document.getElementById('vpn-status');
+            const serverSelect = document.getElementById('server-select');
+            const protectedPanel = document.getElementById('protected-panel');
+            const exposedPanel = document.getElementById('exposed-panel');
+            const explanation = document.getElementById('vpn-explanation');
+
+            if (vpnEnabled) {
+                toggle.classList.add('active');
+                status.textContent = 'VPN ON';
+                status.className = 'vpn-status on';
+                serverSelect.classList.add('active');
+                protectedPanel.classList.add('active-glow');
+
+                // Trigger shake on exposed panel to show danger
+                exposedPanel.classList.add('shake');
+                setTimeout(() => exposedPanel.classList.remove('shake'), 500);
+
+                // Update VPN data display
+                updateVPNDisplay();
+
+                const server = vpnServers[selectedServer];
+                explanation.innerHTML = `<strong style="color: #00b894;">Protected!</strong> Websites see <em>${server.location}</em> instead of <em>${realUserData.location}</em>.
+                    Your real IP (<em>${realUserData.ip}</em>) is hidden behind the VPN server.`;
+            } else {
+                toggle.classList.remove('active');
+                status.textContent = 'VPN OFF';
+                status.className = 'vpn-status off';
+                serverSelect.classList.remove('active');
+                protectedPanel.classList.remove('active-glow');
+
+                // Clear VPN display
+                document.getElementById('vpn-ip').textContent = '---';
+                document.getElementById('vpn-location').textContent = '---';
+                document.getElementById('vpn-isp').textContent = '---';
+                document.getElementById('vpn-timezone').textContent = '---';
+                document.getElementById('vpn-visible').textContent = '---';
+
+                explanation.innerHTML = `<strong style="color: #ff4757;">Exposed!</strong> Websites see your real IP (<em>${realUserData.ip}</em>),
+                    ISP (<em>${realUserData.isp}</em>), and can pinpoint your location to <em>${realUserData.location}</em>.`;
+            }
+        }
+
+        function selectServer(btn) {
+            // Remove selected from all buttons
+            document.querySelectorAll('.server-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            selectedServer = btn.dataset.server;
+
+            // Generate new random IP for this server
+            vpnServers[selectedServer].ip = vpnServers[selectedServer].ip.split('.').slice(0, 3).join('.') + '.' + Math.floor(Math.random() * 255);
+
+            if (vpnEnabled) {
+                updateVPNDisplay();
+            }
+        }
+
+        function updateVPNDisplay() {
+            const server = vpnServers[selectedServer];
+            document.getElementById('vpn-ip').textContent = server.ip;
+            document.getElementById('vpn-location').textContent = server.location;
+            document.getElementById('vpn-isp').textContent = server.isp;
+            document.getElementById('vpn-timezone').textContent = server.timezone;
+            document.getElementById('vpn-visible').textContent = 'Only VPN provider';
+        }
+
     </script>
 </body>
 </html>
